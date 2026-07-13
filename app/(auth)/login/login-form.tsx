@@ -29,18 +29,18 @@ export function LoginForm({
 }: React.ComponentProps<"div">) {
   const { mutate, isPending, error, data, isSuccess } = useLogin();
 
-  const searchParams = useSearchParams();
-
   const router = useRouter();
 
-  const { setAuth } = useAuthStore();
+  const { setAuth, setTournamentId, tournamentId } = useAuthStore();
 
   useEffect(() => {
     if (isSuccess) {
       setAuth(data.token, data.user);
-      router.push("/dashboard");
+      if (!tournamentId && data.lastTournamentId)
+        setTournamentId(data.lastTournamentId);
+      router.push(tournamentId ? `${tournamentId}/dashboard` : "/dashboard");
     }
-  }, [data, isSuccess, router, setAuth]);
+  }, [data, isSuccess, tournamentId, router, setAuth, setTournamentId]);
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),

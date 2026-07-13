@@ -27,18 +27,20 @@ export function RegisterForm({
 }: React.ComponentProps<"div">) {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { setAuth } = useAuthStore();
+  const { setAuth, setTournamentId, tournamentId } = useAuthStore();
 
   const token = searchParams.get("token") || "";
 
   const { mutate, isPending, error, data, isSuccess } = useRegister();
 
   useEffect(() => {
-    if (isSuccess && data) {
+    if (isSuccess) {
       setAuth(data.token, data.user);
-      router.push("/dashboard");
+      if (!tournamentId && data.lastTournamentId)
+        setTournamentId(data.lastTournamentId);
+      router.push(tournamentId ? `${tournamentId}/dashboard` : "/dashboard");
     }
-  }, [data, isSuccess, router, setAuth]);
+  }, [data, isSuccess, tournamentId, router, setAuth, setTournamentId]);
 
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),

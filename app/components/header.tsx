@@ -12,6 +12,7 @@ import {
   HelpCircle,
   User,
   Balloon,
+  LogOut,
 } from "lucide-react";
 import { useAuthStore } from "@/store/auth.store";
 import { useGetMyTournament } from "@/api/tournament/tournaments.queries";
@@ -23,7 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useParams } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 
 const ITEMS = [
   { name: "Dashboard", href: "/dashboard", icon: Home },
@@ -37,7 +38,11 @@ const ITEMS = [
 ];
 
 export default function Header() {
-  const { user } = useAuthStore();
+  const router = useRouter();
+  const pathname = usePathname();
+  const { user, setTournamentId, logout } = useAuthStore();
+
+  console.log(pathname);
 
   const { id } = useParams<{ id: string }>();
 
@@ -89,7 +94,19 @@ export default function Header() {
             <SelectContent>
               <SelectGroup>
                 {items.map((item) => (
-                  <SelectItem key={item.value} value={item.value}>
+                  <SelectItem
+                    key={item.value}
+                    value={item.value}
+                    onClick={() => {
+                      setTournamentId(item.value);
+
+                      const updatedPath = pathname.replace(
+                        /\/\d+\//,
+                        `/${item.value}/`,
+                      );
+                      router.push(updatedPath);
+                    }}
+                  >
                     {item.label}
                   </SelectItem>
                 ))}
@@ -97,17 +114,27 @@ export default function Header() {
             </SelectContent>
           </Select>
 
-          <Link
-            href={"/profile"}
-            className="flex items-center gap-2 text-sm font-medium hover:text-white transition-colors duration-200"
-          >
-            <div>
-              <User className="size-5 stroke-[2.5]" />
-            </div>
-            {user?.firstName}
-            <br />
-            {user?.lastName}
-          </Link>
+          <div className="flex items-center gap-x-6">
+            <Link
+              href={"/profile"}
+              className="flex items-center gap-2 text-sm font-medium hover:text-white transition-colors duration-200"
+            >
+              <div>
+                <User className="size-5 stroke-[2.5]" />
+              </div>
+              {user?.firstName}
+              <br />
+              {user?.lastName}
+            </Link>
+
+            <LogOut
+              onClick={() => {
+                logout();
+                router.push("/login");
+              }}
+              className="size-5 stroke-[2.5] cursor-pointer"
+            />
+          </div>
 
           {/* <div className="flex items-center shrink-0 h-full">
             <button className="flex items-center justify-center w-12 h-12 mr-2 hover:text-white transition-colors">

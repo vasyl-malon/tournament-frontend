@@ -5,6 +5,7 @@ export type LoginParams = {
 
 export type LoginResponse = {
   token: string;
+  lastTournamentId: string | null;
   user: {
     id: number;
     email: string;

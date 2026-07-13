@@ -1,4 +1,4 @@
-import { useLogin, useSendOtp, useAcceptInvite } from "./auth/auth.queries";
+import { useLogin, useRegister } from "./auth/auth.queries";
 import {
   useGetAllMatches,
   useAddBet,
@@ -8,8 +8,7 @@ import {
 
 export {
   useLogin,
-  useSendOtp,
-  useAcceptInvite,
+  useRegister,
   useGetAllMatches,
   useAddBet,
   useGetMyBets,

@@ -19,8 +19,8 @@ export const columns: ColumnDef<GetLeaderboardResponse["data"][number]>[] = [
   {
     accessorKey: "rank",
     header: "Rank",
-    cell: ({ getValue }) => {
-      const value = getValue() as number;
+    cell: ({ row }) => {
+      const value = row.original.rank;
       const rankStyles = getRankStyles(value);
 
       return (
@@ -51,27 +51,29 @@ export const columns: ColumnDef<GetLeaderboardResponse["data"][number]>[] = [
   {
     accessorKey: "totalPredictions",
     header: "Predictions",
-    cell: ({ getValue }) => <span className="text-gray-500">{getValue()}</span>,
+    cell: ({ row }) => (
+      <span className="text-gray-500">{row.original.totalPredictions}</span>
+    ),
   },
   {
     accessorKey: "exactCount",
     header: "Exact",
-    cell: ({ getValue }) => (
-      <span className="text-green-500">{getValue()}</span>
+    cell: ({ row }) => (
+      <span className="text-green-500">{row.original.exactCount}</span>
     ),
   },
   {
     accessorKey: "differenceCount",
     header: "Diff",
-    cell: ({ getValue }) => (
-      <span className="text-yellow-500">{getValue()}</span>
+    cell: ({ row }) => (
+      <span className="text-green-500">{row.original.differenceCount}</span>
     ),
   },
   {
     accessorKey: "outcomeCount",
     header: "Outcome",
-    cell: ({ getValue }) => (
-      <span className="text-yellow-500">{getValue()}</span>
+    cell: ({ row }) => (
+      <span className="text-green-500">{row.original.outcomeCount}</span>
     ),
   },
   {

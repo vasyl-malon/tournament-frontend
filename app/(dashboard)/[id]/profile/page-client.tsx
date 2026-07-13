@@ -1,0 +1,5 @@
+"use client";
+
+export const Profile = () => {
+  return <div>Profile</div>;
+};

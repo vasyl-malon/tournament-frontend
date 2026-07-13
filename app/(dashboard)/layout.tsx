@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Geist } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 import Header from "@/app/components/header";
 import { cn } from "@/lib/utils";
-import QueryProvider from "@/components/query-provider";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -20,12 +19,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn("bg-[#17181c]", "font-sans", geist.variable)}>
-      <body className={`${inter.className} bg-[#0d1117] min-h-screen`}>
-        <main>
-          <QueryProvider>{children}</QueryProvider>
-        </main>
-      </body>
-    </html>
+    <div className="">
+      <Header />
+      <div className="flex-1 w-full max-w-[1400px] mx-auto text-white px-4 py-6 md:px-8 md:py-10">{children}</div>
+    </div>
   );
 }

@@ -57,15 +57,15 @@ export const Predictions = () => {
 
   if (isLoading) return <div>Loading</div>;
 
-  const groupedBets = bets?.reduce(
-    (acc, bet) => {
-      const stage = bet.match.stage;
-      if (!acc[stage]) acc[stage] = [];
-      // acc[stage].push(bet);
-      return acc;
-    },
-    {} as Record<string, Bet[]>,
-  );
+  // const groupedBets = bets?.reduce(
+  //   (acc, bet) => {
+  //     const stage = bet.match.stage;
+  //     if (!acc[stage]) acc[stage] = [];
+  //      acc[stage].push(bet);
+  //     return acc;
+  //   },
+  //   {} as Record<string, Bet[]>,
+  // );
 
   console.log(bets);
 

@@ -23,7 +23,7 @@ interface Bet {
 }
 
 interface MatchPredictionsProps {
-  groupedBets: Record<string, Bet[]>;
+  groupedBets: any; // Record<string, Bet[]>;
   formatStageName: (stage: string) => string;
 }
 

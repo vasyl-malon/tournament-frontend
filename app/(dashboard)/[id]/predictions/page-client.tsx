@@ -65,7 +65,7 @@ export const Predictions = () => {
     (acc, bet) => {
       const stage = bet.match.stage;
       if (!acc[stage]) acc[stage] = [];
-      acc[stage].push(bet);
+      // acc[stage].push(bet);
       return acc;
     },
     {} as Record<string, Bet[]>,
@@ -83,7 +83,7 @@ export const Predictions = () => {
       <UserStatsCards total={4} bonus={5} exact={0} diff={0} outcome={0} />
       <BonusPredictions predictions={bonusPredictionsMock} />
       <MatchPredictions
-        groupedBets={groupedBets}
+        groupedBets={groupedBets as unknown}
         formatStageName={formatStageName}
       />
     </div>

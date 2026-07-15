@@ -20,10 +20,10 @@ export const MatchCard: FC<MatchCardProps> = ({ item }) => {
   const bet = item.bets.length ? item.bets[0] : null;
 
   const [homeScore, setHomeScore] = useState<string | undefined>(
-    bet?.homeScore.toString(),
+    bet?.homeScore?.toString(),
   );
   const [awayScore, setAwayScore] = useState<string | undefined>(
-    bet?.awayScore.toString(),
+    bet?.awayScore?.toString(),
   );
 
   const date = dayjs(item?.startTime).format("MMM DD, YYYY - HH:mm");

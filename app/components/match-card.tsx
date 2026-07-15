@@ -5,7 +5,7 @@ import { FC, useState } from "react";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Loader, Lock } from "lucide-react";
+import { Loader, Lock, Shield } from "lucide-react";
 import { Match, MatchStatus } from "@/api/match/match.types";
 import { useAddBet } from "@/api";
 import { cn } from "@/lib/utils";
@@ -35,16 +35,22 @@ export const MatchCard: FC<MatchCardProps> = ({ item }) => {
     <div className="flex flex-col gap-y-4 bg-[#151b23] text-[#9198a1] border !border-[#3d444d] rounded-md p-4 pt-8 w-full">
       <div className="flex items-center justify-between">
         <div className="flex flex-col items-center gap-2 flex-1">
-          <Image
-            src={item.homeTeamLogo}
-            alt={`Team logo - ${item.homeTeam}`}
-            width={48}
-            height={48}
-            className="object-contain"
-          />
-          <span className="font-semibold text-slate-50 text-center">
-            {item.homeTeam}
-          </span>
+          {item.homeTeam ? (
+            <>
+              <Image
+                src={item.homeTeamLogo}
+                alt={`Team logo - ${item.homeTeam}`}
+                width={48}
+                height={48}
+                className="object-contain"
+              />
+              <span className="font-semibold text-slate-50 text-center">
+                {item.homeTeam}
+              </span>
+            </>
+          ) : (
+            <Shield className="size-12" />
+          )}
         </div>
         {item.homeScore !== null &&
         item.awayScore !== null &&
@@ -80,16 +86,22 @@ export const MatchCard: FC<MatchCardProps> = ({ item }) => {
         )}
 
         <div className="flex flex-col items-center gap-2 flex-1">
-          <Image
-            src={item.awayTeamLogo}
-            alt={`Team logo - ${item.awayTeam}`}
-            width={48}
-            height={48}
-            className="object-contain"
-          />
-          <span className="font-semibold text-slate-50 text-center">
-            {item.awayTeam}
-          </span>
+          {item.awayTeam ? (
+            <>
+              <Image
+                src={item.awayTeamLogo}
+                alt={`Team logo - ${item.awayTeam}`}
+                width={48}
+                height={48}
+                className="object-contain"
+              />
+              <span className="font-semibold text-slate-50 text-center">
+                {item.awayTeam}
+              </span>
+            </>
+          ) : (
+            <Shield className="size-12" />
+          )}
         </div>
       </div>
 

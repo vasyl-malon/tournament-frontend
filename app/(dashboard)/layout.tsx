@@ -1,16 +1,11 @@
 import type { Metadata } from "next";
-import { Inter, Geist } from "next/font/google";
-import "../globals.css";
 import Header from "@/app/components/header";
-import { cn } from "@/lib/utils";
-
-const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
-
-const inter = Inter({ subsets: ["latin"] });
+import Footer from "../components/footer";
+import "../globals.css";
 
 export const metadata: Metadata = {
   title: "Betting App",
-  description: "Football predictions with friends",
+  description: "Football predictions",
 };
 
 export default function RootLayout({
@@ -19,9 +14,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="">
+    <div className="flex flex-col min-h-screen">
       <Header />
-      <div className="flex-1 w-full max-w-[1400px] mx-auto text-white px-4 py-6 md:px-8 md:py-10">{children}</div>
+      <main className="flex-grow flex-1 w-full max-w-[1400px] mx-auto text-white px-4 pt-22 md:px-8 md:pt-26 pb-8">
+        {children}
+      </main>
+      <Footer />
     </div>
   );
 }

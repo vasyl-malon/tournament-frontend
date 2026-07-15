@@ -40,8 +40,9 @@ export const Dashboard = () => {
         </span>
         <span className="text-lg text-gray-400">Make your predictions</span>
       </div>
-      <div className="grid grid-cols-3 gap-8">
-        <div className="flex flex-col gap-y-6 col-span-2">
+
+      <div className="grid lg:grid-cols-3 gap-8">
+        <div className="flex flex-col gap-y-6 lg:col-span-2">
           <div className="flex gap-4 justify-between">
             <h1 className="text-xl font-semibold">Upcoming Matches</h1>
             <Button
@@ -51,8 +52,9 @@ export const Dashboard = () => {
               View all
             </Button>
           </div>
-          <div className="grid grid-cols-2 gap-6">{items}</div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">{items}</div>
         </div>
+
         <div className="flex flex-col gap-y-4 bg-[#151b23] text-white border !border-[#3d444d] rounded-md p-4 w-full h-fit">
           <h2 className="text-md font-semibold">Bonus Predictions</h2>
           <div className="flex bg-red-100 text-red-700 text-sm p-2 rounded-md items-center">

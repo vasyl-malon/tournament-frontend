@@ -3,6 +3,53 @@
 import { useGetMyBets } from "@/api";
 import { useGetMyTournament } from "@/api/tournament/tournaments.queries";
 import { useParams } from "next/navigation";
+import { CheckCircle2, XCircle, Clock } from "lucide-react";
+import Image from "next/image";
+import { cn } from "@/lib/utils";
+import { Bet } from "@/api/match/match.types";
+import { UserStatsCards } from "./user-stats-cards";
+import { BonusPrediction, BonusPredictions } from "./bonus";
+import { MatchPredictions } from "./match-predictions";
+import { RankCard } from "./rank";
+
+const bonusPredictionsMock: BonusPrediction[] = [
+  {
+    id: "b1",
+    type: "CHAMPION",
+    title: "Champion",
+    predictionValue: "FRA",
+    predictionLogo: "https://crests.football-data.org/773.svg", // Франція
+    pointsWorth: 15,
+    status: "INCORRECT",
+  },
+  {
+    id: "b2",
+    type: "RUNNER_UP",
+    title: "Runner-up",
+    predictionValue: "ENG",
+    predictionLogo: "https://crests.football-data.org/770.svg", // Англія
+    pointsWorth: 10,
+    status: "CORRECT",
+  },
+  {
+    id: "b3",
+    type: "THIRD_PLACE",
+    title: "Third Place",
+    predictionValue: "ESP",
+    predictionLogo: "https://crests.football-data.org/760.svg", // Іспанія
+    pointsWorth: 8,
+    status: "PENDING",
+  },
+  {
+    id: "b4",
+    type: "TOP_SCORER",
+    title: "Top Scorer",
+    predictionValue: "Kylian Mbappé",
+    predictionLogo: null, // Для гравця логотип не потрібен
+    pointsWorth: 10,
+    status: "PENDING",
+  },
+];
 
 export const Predictions = () => {
   // const { data } = useGetMyTournament();
@@ -10,19 +57,35 @@ export const Predictions = () => {
 
   // console.log(data);
 
-  const { data } = useGetMyBets({ tournamentId: id });
+  const { data: bets, isLoading } = useGetMyBets({ tournamentId: id });
 
-  console.log(data);
+  if (isLoading) return <div>Loading</div>;
+
+  const groupedBets = bets?.reduce(
+    (acc, bet) => {
+      const stage = bet.match.stage;
+      if (!acc[stage]) acc[stage] = [];
+      acc[stage].push(bet);
+      return acc;
+    },
+    {} as Record<string, Bet[]>,
+  );
+
+  console.log(bets);
+
+  const formatStageName = (stage: string) => {
+    return stage.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
+  };
 
   return (
     <div className="flex flex-col gap-y-10">
-      <div className="flex flex-col gap-y-2 p-6 bg-[#151b23] rounded-md border !border-[#3d444d]">
-        <span className="text-xl font-semibold">My Predictions</span>
-        <span className="text-lg text-gray-400">
-          Prediction history and how every point was earned
-        </span>
-      </div>
-      <div></div>
+      <RankCard user={"Vasyl Malon"} rank={2} />
+      <UserStatsCards total={4} bonus={5} exact={0} diff={0} outcome={0} />
+      <BonusPredictions predictions={bonusPredictionsMock} />
+      <MatchPredictions
+        groupedBets={groupedBets}
+        formatStageName={formatStageName}
+      />
     </div>
   );
 };

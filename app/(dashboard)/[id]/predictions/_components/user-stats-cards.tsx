@@ -1,50 +1,41 @@
 import { Trophy, Award, Target, CheckCircle2, Scale } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { Statistic } from "@/api/match/match.types";
 
 interface UserStatsProps {
-  total: number;
-  bonus: number;
-  exact: number;
-  diff: number;
-  outcome: number;
+  statistic?: Statistic;
 }
 
-export function UserStatsCards({
-  total,
-  bonus,
-  exact,
-  diff,
-  outcome,
-}: UserStatsProps) {
+export function UserStatsCards({ statistic }: UserStatsProps) {
   const stats = [
     {
       title: "Total Points",
-      value: total,
+      value: statistic?.totalPoints,
       icon: Trophy,
       iconColor: "text-yellow-500",
     },
     {
       title: "Bonus Points",
-      value: bonus,
+      value: 0,
       icon: Award,
       iconColor: "text-purple-500",
     },
     {
       title: "Exact Scores",
-      value: exact,
+      value: statistic?.exactCount,
       icon: Target,
       iconColor: "text-emerald-500",
     },
     {
       title: "Correct Difference",
-      value: diff,
+      value: statistic?.differenceCount,
       icon: Scale,
       iconColor: "text-teal-500",
     },
     {
       title: "Correct Outcomes",
-      value: outcome,
+      value: statistic?.outcomeCount,
       icon: CheckCircle2,
       iconColor: "text-blue-500",
     },

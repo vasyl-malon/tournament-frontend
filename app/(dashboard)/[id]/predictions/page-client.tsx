@@ -1,12 +1,12 @@
 "use client";
 
-import { useGetMyBets } from "@/api";
+import { useGetUserBets } from "@/api";
 import { useParams } from "next/navigation";
-import { Bet } from "@/api/match/match.types";
-import { UserStatsCards } from "./user-stats-cards";
-import { BonusPrediction, BonusPredictions } from "./bonus";
-import { MatchPredictions } from "./match-predictions";
-import { RankCard } from "./rank";
+import { UserStatsCards } from "./_components/user-stats-cards";
+import { BonusPrediction, BonusPredictions } from "./_components/bonus";
+import { RankCard } from "./_components/rank";
+import { useAuthStore } from "@/store/auth.store";
+import { MatchPredictions } from "./_components/match-predictions";
 
 const bonusPredictionsMock: BonusPrediction[] = [
   {
@@ -48,40 +48,27 @@ const bonusPredictionsMock: BonusPrediction[] = [
 ];
 
 export const Predictions = () => {
-  // const { data } = useGetMyTournament();
   const { id } = useParams<{ id: string }>();
+  const { user } = useAuthStore();
 
-  // console.log(data);
-
-  const { data: bets, isLoading } = useGetMyBets({ tournamentId: id });
+  const { data, isLoading } = useGetUserBets(
+    {
+      userId: user?.id.toString() || "",
+      tournamentId: id,
+    },
+    { enabled: !!(user?.id && id) },
+  );
 
   if (isLoading) return <div>Loading</div>;
 
-  // const groupedBets = bets?.reduce(
-  //   (acc, bet) => {
-  //     const stage = bet.match.stage;
-  //     if (!acc[stage]) acc[stage] = [];
-  //      acc[stage].push(bet);
-  //     return acc;
-  //   },
-  //   {} as Record<string, Bet[]>,
-  // );
-
-  console.log(bets);
-
-  const formatStageName = (stage: string) => {
-    return stage.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
-  };
+  const username = `${data?.data.stats.firstName} ${data?.data.stats.lastName}`;
 
   return (
     <div className="flex flex-col gap-y-10">
-      <RankCard user={"Vasyl Malon"} rank={2} />
-      <UserStatsCards total={4} bonus={5} exact={0} diff={0} outcome={0} />
+      <RankCard username={username} rank={data?.data.stats.rank} />
+      <UserStatsCards statistic={data?.data.stats} />
       <BonusPredictions predictions={bonusPredictionsMock} />
-      {/* <MatchPredictions
-        groupedBets={groupedBets}
-        formatStageName={formatStageName}
-      /> */}
+      <MatchPredictions bets={data?.data.bets || []} />
     </div>
   );
 };

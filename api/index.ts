@@ -4,6 +4,7 @@ import {
   useAddBet,
   useGetMyBets,
   useGetLeaderboard,
+  useGetUserBets,
 } from "./match/match.queries";
 
 export {
@@ -13,4 +14,5 @@ export {
   useAddBet,
   useGetMyBets,
   useGetLeaderboard,
+  useGetUserBets,
 };

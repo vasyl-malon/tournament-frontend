@@ -1,21 +1,26 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, UseQueryOptions } from "@tanstack/react-query";
 import {
   GetAllMatchesResponse,
   GetAllMatchesParams,
-  AddBetResponse,
   AddBetParams,
   GetLeaderboardParams,
   GetLeaderboardResponse,
   GetMyBetsResponse,
   GetMyBetsParams,
+  GetUserBetsParams,
+  GetUserBetsResponse,
 } from "./match.types";
 import { AxiosError } from "axios";
 import { matchApi } from "./match.api";
 
-export const useGetAllMatches = (params: GetAllMatchesParams) =>
-  useQuery<GetAllMatchesResponse, AxiosError>({
+export const useGetAllMatches = (
+  params: GetAllMatchesParams,
+  queryParams?: Partial<UseQueryOptions<GetAllMatchesResponse>>,
+) =>
+  useQuery({
     queryKey: ["get-matches", params],
     queryFn: () => matchApi.getAll(params),
+    ...queryParams,
   });
 
 export const useGetMyBets = (params: GetMyBetsParams) =>
@@ -25,27 +30,27 @@ export const useGetMyBets = (params: GetMyBetsParams) =>
   });
 
 export const useAddBet = () =>
-  useMutation<AddBetResponse, AxiosError, AddBetParams>({
+  useMutation<object, AxiosError, AddBetParams>({
     mutationKey: ["add-bet"],
     mutationFn: matchApi.addBet,
   });
 
-export const useGetLeaderboard = (params: GetLeaderboardParams) =>
-  useQuery<GetLeaderboardResponse, AxiosError>({
+export const useGetLeaderboard = (
+  params: GetLeaderboardParams,
+  queryParams?: Partial<UseQueryOptions<GetLeaderboardResponse>>,
+) =>
+  useQuery({
     queryKey: ["get-leaderboard", params],
     queryFn: () => matchApi.getAllLeaderboard(params),
+    ...queryParams,
   });
 
-// export const useCreateBranch = () =>
-//   useMutation<CreateBranchParams, AxiosError, CreateBranchResponse>({
-//     mutationKey: ["create-branch"],
-//     mutationFn: branchApi.create,
-//   });
-
-// export const useUpdateBranchStatus = () =>
-//   useMutation<UpdateBranchStatusParams, AxiosError, UpdateBranchStatusResponse>(
-//     {
-//       mutationKey: ["update-branch-status"],
-//       mutationFn: branchApi.updateStatus,
-//     },
-//   );
+export const useGetUserBets = (
+  params: GetUserBetsParams,
+  queryParams?: Partial<UseQueryOptions<GetUserBetsResponse>>,
+) =>
+  useQuery({
+    queryKey: ["get-user-bets", params],
+    queryFn: () => matchApi.getUserBets(params),
+    ...queryParams,
+  });

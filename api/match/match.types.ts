@@ -5,25 +5,27 @@ export enum MatchStatus {
 }
 
 export type Bet = {
-  awayScore: number;
+  id: string;
+  awayScore: number | null;
   createdAt: string;
-  homeScore: number;
+  homeScore: number | null;
   matchId: string;
   pointsEarned: number;
   updatedAt: string;
   userId: string;
+  match: Match;
 };
 
 export type Match = {
   matchWeek: number;
   utcDate: string;
   apiMatchId: string;
-  awayScore: string | null;
+  awayScore: number | null;
   awayTeam: string;
   awayTeamLogo: string;
   group: string | null;
   awayScorehomeScore: null;
-  homeScore: string | null;
+  homeScore: number | null;
   homeTeam: string;
   homeTeamLogo: string;
   id: string;
@@ -33,6 +35,19 @@ export type Match = {
   status: MatchStatus;
   tournamentId: string;
   bets: Array<Bet>;
+};
+
+export type Statistic = {
+  differenceCount: number;
+  email: string;
+  exactCount: number;
+  firstName: string;
+  lastName: string;
+  outcomeCount: number;
+  rank: number;
+  totalPoints: number;
+  totalPredictions: number;
+  userId: string;
 };
 
 export type GetAllMatchesParams = {
@@ -51,8 +66,6 @@ export type AddBetParams = {
   homeScore: number;
   awayScore: number;
 };
-
-export type AddBetResponse = {};
 
 export type GetMyBetsParams = {
   tournamentId: string;
@@ -74,16 +87,17 @@ export type GetLeaderboardParams = {
 };
 
 export type GetLeaderboardResponse = {
-  data: Array<{
-    differenceCount: number;
-    email: string;
-    exactCount: number;
-    firstName: string;
-    lastName: string;
-    outcomeCount: number;
-    rank: number;
-    totalPoints: number;
-    totalPredictions: number;
-    userId: string;
-  }>;
+  data: Array<Statistic>;
+};
+
+export type GetUserBetsParams = {
+  userId: string;
+  tournamentId: string;
+};
+
+export type GetUserBetsResponse = {
+  data: {
+    stats: Statistic;
+    bets: Array<Bet>;
+  };
 };

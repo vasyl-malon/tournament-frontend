@@ -1,11 +1,7 @@
 "use client";
 
 import { useGetMyBets } from "@/api";
-import { useGetMyTournament } from "@/api/tournament/tournaments.queries";
 import { useParams } from "next/navigation";
-import { CheckCircle2, XCircle, Clock } from "lucide-react";
-import Image from "next/image";
-import { cn } from "@/lib/utils";
 import { Bet } from "@/api/match/match.types";
 import { UserStatsCards } from "./user-stats-cards";
 import { BonusPrediction, BonusPredictions } from "./bonus";
@@ -18,7 +14,7 @@ const bonusPredictionsMock: BonusPrediction[] = [
     type: "CHAMPION",
     title: "Champion",
     predictionValue: "FRA",
-    predictionLogo: "https://crests.football-data.org/773.svg", // Франція
+    predictionLogo: "https://crests.football-data.org/773.svg",
     pointsWorth: 15,
     status: "INCORRECT",
   },
@@ -27,7 +23,7 @@ const bonusPredictionsMock: BonusPrediction[] = [
     type: "RUNNER_UP",
     title: "Runner-up",
     predictionValue: "ENG",
-    predictionLogo: "https://crests.football-data.org/770.svg", // Англія
+    predictionLogo: "https://crests.football-data.org/770.svg",
     pointsWorth: 10,
     status: "CORRECT",
   },
@@ -36,7 +32,7 @@ const bonusPredictionsMock: BonusPrediction[] = [
     type: "THIRD_PLACE",
     title: "Third Place",
     predictionValue: "ESP",
-    predictionLogo: "https://crests.football-data.org/760.svg", // Іспанія
+    predictionLogo: "https://crests.football-data.org/760.svg",
     pointsWorth: 8,
     status: "PENDING",
   },
@@ -45,7 +41,7 @@ const bonusPredictionsMock: BonusPrediction[] = [
     type: "TOP_SCORER",
     title: "Top Scorer",
     predictionValue: "Kylian Mbappé",
-    predictionLogo: null, // Для гравця логотип не потрібен
+    predictionLogo: null,
     pointsWorth: 10,
     status: "PENDING",
   },
@@ -82,10 +78,10 @@ export const Predictions = () => {
       <RankCard user={"Vasyl Malon"} rank={2} />
       <UserStatsCards total={4} bonus={5} exact={0} diff={0} outcome={0} />
       <BonusPredictions predictions={bonusPredictionsMock} />
-      <MatchPredictions
-        groupedBets={groupedBets as unknown}
+      {/* <MatchPredictions
+        groupedBets={groupedBets}
         formatStageName={formatStageName}
-      />
+      /> */}
     </div>
   );
 };

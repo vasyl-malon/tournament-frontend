@@ -9,6 +9,9 @@ import {
   GetMyBetsParams,
   GetUserBetsParams,
   GetUserBetsResponse,
+  AddBonusBetParams,
+  GetBonusPredictionParams,
+  GetBonusPredictionResponse,
 } from "./match.types";
 import { AxiosError } from "axios";
 import { matchApi } from "./match.api";
@@ -53,4 +56,20 @@ export const useGetUserBets = (
     queryKey: ["get-user-bets", params],
     queryFn: () => matchApi.getUserBets(params),
     ...queryParams,
+  });
+
+export const useGetBonusPrediction = (
+  params: GetBonusPredictionParams,
+  queryParams?: Partial<UseQueryOptions<GetBonusPredictionResponse>>,
+) =>
+  useQuery({
+    queryKey: ["get-bonus-prediction", params],
+    queryFn: () => matchApi.getBonusPrediction(params),
+    ...queryParams,
+  });
+
+export const useAddBonusBet = () =>
+  useMutation({
+    mutationKey: ["add-bonus-bet"],
+    mutationFn: matchApi.addBonusBet,
   });

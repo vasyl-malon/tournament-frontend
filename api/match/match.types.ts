@@ -99,5 +99,64 @@ export type GetUserBetsResponse = {
   data: {
     stats: Statistic;
     bets: Array<Bet>;
+    bonusPrediction: {
+      champion: {
+        id: number;
+        logo: string;
+        name: string;
+        pointsWorth: number | null;
+        pointsEarned: number | null;
+      };
+      runnerUp: {
+        id: number;
+        logo: string;
+        name: string;
+        pointsWorth: number | null;
+        pointsEarned: number | null;
+      };
+      topScorer: {
+        id: number;
+        name: string;
+        pointsWorth: number | null;
+        pointsEarned: number | null;
+        teamLogo: string;
+      };
+    };
+  };
+};
+
+export type AddBonusBetParams = {
+  championTeamId?: number;
+  runnerUpTeamId?: number;
+  topScorerId?: number;
+  tournamentId: string;
+};
+
+export type GetBonusPredictionParams = {
+  tournamentId: string;
+};
+
+export type GetBonusPredictionResponse = {
+  tournamentStatus: string
+  champion?: {
+    id: number;
+    logo: string;
+    name: string;
+    pointsWorth: number | null;
+    pointsEarned: number | null;
+  };
+  runnerUp?: {
+    id: number;
+    logo: string;
+    name: string;
+    pointsWorth: number | null;
+    pointsEarned: number | null;
+  };
+  topScorer?: {
+    id: number;
+    name: string;
+    pointsWorth: number | null;
+    pointsEarned: number | null;
+    teamLogo: string;
   };
 };

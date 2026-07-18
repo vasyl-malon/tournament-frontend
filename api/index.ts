@@ -7,6 +7,8 @@ import {
   useGetUserBets,
 } from "./match/match.queries";
 
+import { useGetTeams, useGetPlayers } from "./tournament/tournaments.queries";
+
 export {
   useLogin,
   useRegister,
@@ -15,4 +17,6 @@ export {
   useGetMyBets,
   useGetLeaderboard,
   useGetUserBets,
+  useGetTeams,
+  useGetPlayers,
 };

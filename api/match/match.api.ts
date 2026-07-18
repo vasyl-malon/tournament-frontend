@@ -9,6 +9,9 @@ import {
   GetMyBetsResponse,
   GetUserBetsParams,
   GetUserBetsResponse,
+  AddBonusBetParams,
+  GetBonusPredictionResponse,
+  GetBonusPredictionParams,
 } from "./match.types";
 
 export const matchApi = {
@@ -39,6 +42,17 @@ export const matchApi = {
 
   getUserBets: async (params: GetUserBetsParams) => {
     const res = await api.get<GetUserBetsResponse>(`/matches/bets`, { params });
+    return res.data;
+  },
+
+
+  getBonusPrediction: async (params: GetBonusPredictionParams) => {
+    const res = await api.get<GetBonusPredictionResponse>(`/matches/bonus`, { params });
+    return res.data;
+  },
+
+  addBonusBet: async (params: AddBonusBetParams) => {
+    const res = await api.post<object>(`/matches/bonus`, params);
     return res.data;
   },
 };

@@ -1,24 +1,27 @@
 import { api } from "../http";
-import { GetMyTournamentsResponse } from "./tournaments.types";
+import {
+  GetMyTournamentsResponse,
+  GetPlayersParams,
+  GetPlayersResponse,
+  GetTeamsParams,
+  GetTeamsResponse,
+} from "./tournaments.types";
 
 export const tournamentApi = {
   getMy: async () => {
     const res = await api.get<GetMyTournamentsResponse>("/tournaments/my");
     return res.data;
   },
-  // getOne: async ({ id }: GetBranchParams) => {
-  //   const res = await api.get<GetBranchResponse>(`/branches/${id}`);
-  //   return res.data;
-  // },
-  // create: async (params: CreateBranchParams) => {
-  //   const res = await api.post<CreateBranchResponse>("/branches", params);
-  //   return res.data;
-  // },
-  // updateStatus: async ({ id, status }: UpdateBranchStatusParams) => {
-  //   const res = await api.put<UpdateBranchStatusResponse>(
-  //     `/branches/${id}/status`,
-  //     { status },
-  //   );
-  //   return res.data;
-  // },
+
+  getTeams: async (params: GetTeamsParams) => {
+    const res = await api.get<GetTeamsResponse>("/matches/teams", { params });
+    return res.data;
+  },
+
+  getPlayers: async (params: GetPlayersParams) => {
+    const res = await api.get<GetPlayersResponse>("/matches/players", {
+      params,
+    });
+    return res.data;
+  },
 };

@@ -15,7 +15,7 @@ export const RankCard: FC<RankCardProps> = ({ username, rank = 0 }) => (
     </div>
     <div className="flex flex-col items-end justify-center">
       <span className="text-red-600 text-5xl font-bold tracking-tighter leading-none">
-        #{rank}
+        # {rank}
       </span>
       <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider mt-1.5">
         Current Rank

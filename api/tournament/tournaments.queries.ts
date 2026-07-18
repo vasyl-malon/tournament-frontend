@@ -1,5 +1,11 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { GetMyTournamentsResponse } from "./tournaments.types";
+import { useQuery, UseQueryOptions } from "@tanstack/react-query";
+import {
+  GetMyTournamentsResponse,
+  GetPlayersParams,
+  GetPlayersResponse,
+  GetTeamsParams,
+  GetTeamsResponse,
+} from "./tournaments.types";
 import { AxiosError } from "axios";
 import { tournamentApi } from "./tournaments.api";
 
@@ -9,22 +15,22 @@ export const useGetMyTournament = () =>
     queryFn: tournamentApi.getMy,
   });
 
-// export const useGetBranch = (params: GetBranchParams) =>
-//   useQuery<GetBranchResponse, AxiosError>({
-//     queryKey: ["get-branch", params.id],
-//     queryFn: () => branchApi.getOne(params),
-//   });
+export const useGetTeams = (
+  params: GetTeamsParams,
+  queryParams?: Partial<UseQueryOptions<GetTeamsResponse>>,
+) =>
+  useQuery({
+    queryKey: ["get-teams", params],
+    queryFn: () => tournamentApi.getTeams(params),
+    ...queryParams,
+  });
 
-// export const useCreateBranch = () =>
-//   useMutation<CreateBranchParams, AxiosError, CreateBranchResponse>({
-//     mutationKey: ["create-branch"],
-//     mutationFn: branchApi.create,
-//   });
-
-// export const useUpdateBranchStatus = () =>
-//   useMutation<UpdateBranchStatusParams, AxiosError, UpdateBranchStatusResponse>(
-//     {
-//       mutationKey: ["update-branch-status"],
-//       mutationFn: branchApi.updateStatus,
-//     },
-//   );
+export const useGetPlayers = (
+  params: GetPlayersParams,
+  queryParams?: Partial<UseQueryOptions<GetPlayersResponse>>,
+) =>
+  useQuery({
+    queryKey: ["get-players", params],
+    queryFn: () => tournamentApi.getPlayers(params),
+    ...queryParams,
+  });

@@ -69,7 +69,7 @@ export const MatchCard: FC<MatchCardProps> = ({ item }) => {
 
   return (
     <div className="flex flex-col gap-y-4 bg-brand-container border border-brand-border rounded-md p-4 pt-8 w-full">
-      <div className="flex grid grid-cols-4">
+      <div className="flex grid grid-cols-3 grid-cols-[1fr_auto_1fr] gap-x-2">
         <div className="flex flex-col items-center gap-2 flex-1 pt-2">
           {item.homeTeam ? (
             <>
@@ -89,7 +89,7 @@ export const MatchCard: FC<MatchCardProps> = ({ item }) => {
           )}
         </div>
 
-        <div className="flex flex-col items-center flex-[1.5] col-span-2">
+        <div className="flex flex-col items-center justify-center">
           {item.homeScore !== null &&
           item.awayScore !== null &&
           item.status !== MatchStatus.SCHEDULED ? (

@@ -45,7 +45,6 @@ export const MatchCard: FC<MatchCardProps> = ({ item }) => {
   const totalPoints =
     (bet?.pointsEarned || 0) + (bet?.advancingPointsEarned || 0);
 
-  // 💡 UX Авто-вибір команди на прохід за її числовим ID залежно від рахунку
   useEffect(() => {
     if (!isKnockout || isStarted) return;
 
@@ -54,6 +53,7 @@ export const MatchCard: FC<MatchCardProps> = ({ item }) => {
 
     if (!isNaN(hScore) && !isNaN(aScore)) {
       if (hScore > aScore && item.homeTeam?.id)
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setAdvancingTeamId(item.homeTeam.id);
       if (aScore > hScore && item.awayTeam?.id)
         setAdvancingTeamId(item.awayTeam.id);
@@ -68,20 +68,19 @@ export const MatchCard: FC<MatchCardProps> = ({ item }) => {
   ]);
 
   return (
-    <div className="flex flex-col gap-y-4 bg-brand-container text-text-muted border border-brand-border rounded-md p-4 pt-8 w-full transition-all duration-200 hover:border-brand-border-muted">
-      <div className="flex items-start justify-between">
-        {/* Home Team */}
+    <div className="flex flex-col gap-y-4 bg-brand-container border border-brand-border rounded-md p-4 pt-8 w-full">
+      <div className="flex grid grid-cols-4">
         <div className="flex flex-col items-center gap-2 flex-1 pt-2">
           {item.homeTeam ? (
             <>
               <Image
-                src={item.homeTeam.logo || "/placeholder.png"}
+                src={item.homeTeam.logo}
                 alt={`Team logo - ${item.homeTeam.name}`}
                 width={48}
                 height={48}
-                className="object-contain"
+                className="object-contain size-12"
               />
-              <span className="font-semibold text-text-primary text-center text-sm sm:text-base">
+              <span className="font-semibold text-center text-sm sm:text-base break-all">
                 {item.homeTeam.name}
               </span>
             </>
@@ -90,13 +89,11 @@ export const MatchCard: FC<MatchCardProps> = ({ item }) => {
           )}
         </div>
 
-        {/* Center: Scores & Predictions */}
-        <div className="flex flex-col items-center flex-[1.5]">
+        <div className="flex flex-col items-center flex-[1.5] col-span-2">
           {item.homeScore !== null &&
           item.awayScore !== null &&
           item.status !== MatchStatus.SCHEDULED ? (
-            // ================= РЕЖИМ ПЕРЕГЛЯДУ =================
-            <div className="flex flex-col justify-center items-center w-full">
+            <div className="flex flex-col justify-center items-center w-full px-2">
               <span className="text-text-muted text-[11px] uppercase tracking-wider font-medium mb-1">
                 Your bet
               </span>
@@ -118,33 +115,36 @@ export const MatchCard: FC<MatchCardProps> = ({ item }) => {
 
               <div className="flex flex-col items-center mt-4 pt-3 border-t border-brand-border-muted w-full">
                 <span className="text-text-muted text-xs">
-                  Final score:{" "}
-                  <span className="font-bold text-text-primary ml-1">
+                  Final score:
+                  <span className="font-bold text-text-primary ms-1 text-red-500">
                     {item.homeScore} : {item.awayScore}
                   </span>
                 </span>
 
                 {item.homeScorePen !== null && item.awayScorePen !== null && (
-                  <span className="text-[11px] font-semibold text-nomination-scorer mt-0.5">
+                  <span className="text-xs font-semibold text-nomination-scorer mt-0.5">
                     ({item.homeScorePen} : {item.awayScorePen} pen)
                   </span>
                 )}
 
                 {item.advancingTeamId && (
-                  <span className="text-[11px] text-success font-semibold mt-2 flex items-center gap-1 bg-success/5 px-2 py-0.5 rounded border border-success/20">
-                    <Trophy className="size-3" />{" "}
-                    {Number(item.advancingTeamId) === item.homeTeam?.id
-                      ? item.homeTeam.name
-                      : item.awayTeam?.name}{" "}
+                  <span className="text-xs mt-2 flex items-center gap-1 px-2 py-1 rounded border border-white/40">
+                    <div>
+                      <Trophy className="size-3" />
+                    </div>
+                    <span className="font-semibold">
+                      {Number(item.advancingTeamId) === item.homeTeam?.id
+                        ? item.homeTeam.name
+                        : item.awayTeam?.name}
+                    </span>
                     qualified
                   </span>
                 )}
               </div>
             </div>
           ) : (
-            // ================= РЕЖИМ РЕДАГУВАННЯ =================
             <div className="flex flex-col items-center w-full">
-              <div className="flex items-center gap-2 px-4">
+              <div className="flex items-center gap-2">
                 <Input
                   value={homeScore}
                   disabled={isStarted}
@@ -162,13 +162,12 @@ export const MatchCard: FC<MatchCardProps> = ({ item }) => {
                 />
               </div>
 
-              {/* Селектор проходу для плей-оф */}
               {isKnockout && item.homeTeam && item.awayTeam && (
                 <div className="mt-4 flex flex-col items-center gap-1.5 w-full">
-                  <span className="text-[10px] uppercase tracking-wider text-text-muted font-bold">
+                  <span className="text-xs uppercase tracking-wider text-text-muted font-bold">
                     Who qualifies?
                   </span>
-                  <div className="flex bg-brand-card rounded p-1 border border-brand-border w-full max-w-[180px]">
+                  <div className="flex bg-brand-card rounded p-1 border border-brand-border w-full">
                     <button
                       type="button"
                       disabled={isStarted || !homeScore || !awayScore}
@@ -202,18 +201,17 @@ export const MatchCard: FC<MatchCardProps> = ({ item }) => {
           )}
         </div>
 
-        {/* Away Team */}
         <div className="flex flex-col items-center gap-2 flex-1 pt-2">
           {item.awayTeam ? (
             <>
               <Image
-                src={item.awayTeam.logo || "/placeholder.png"}
+                src={item.awayTeam.logo}
                 alt={`Team logo - ${item.awayTeam.name}`}
                 width={48}
                 height={48}
-                className="object-contain"
+                className="object-contain size-12"
               />
-              <span className="font-semibold text-text-primary text-center text-sm sm:text-base">
+              <span className="font-semibold text-center text-sm sm:text-base break-all">
                 {item.awayTeam.name}
               </span>
             </>
@@ -223,28 +221,23 @@ export const MatchCard: FC<MatchCardProps> = ({ item }) => {
         </div>
       </div>
 
-      {/* Дата та інформація про тур */}
-      <div className="flex flex-col items-center gap-y-1 text-[11px] text-text-muted mb-2 mt-2 font-medium">
+      <div className="flex flex-col items-center gap-y-1 text-xs text-gray-400 my-2">
         <span>{date}</span>
         {item?.matchday ? (
-          <span className="text-text-secondary">
+          <span>
             Matchday {item?.matchday}
             {item.group ? ` • Group ${item.group.split("_")[1]}` : null}
           </span>
         ) : null}
       </div>
 
-      {/* Кнопка або результати набраних очок */}
       {item.status === MatchStatus.FINISHED && bet ? (
         <div
           className={cn(
-            "text-text-primary px-4 py-2.5 rounded-md text-sm font-bold text-center border transition-colors",
-            totalPoints === 0 && "bg-red-950/20 text-error border-red-500/20",
-            totalPoints > 0 &&
-              totalPoints < 3 &&
-              "bg-yellow-950/20 text-nomination-scorer border-yellow-500/20",
-            totalPoints >= 3 &&
-              "bg-emerald-950/20 text-success border-success/20",
+            "px-4 py-2.5 rounded-sm text-sm font-bold text-center border transition-colors",
+            totalPoints
+              ? "bg-green-950/20 text-success border-green-500/20"
+              : "bg-red-950/20 text-error border-red-500/20",
           )}
         >
           {totalPoints === 0 ? "0 points" : `+${totalPoints} points`}
@@ -260,8 +253,7 @@ export const MatchCard: FC<MatchCardProps> = ({ item }) => {
             isPending ||
             !!(isKnockout && !advancingTeamId)
           }
-          onClick={() => {
-            console.log(isKnockout, advancingTeamId)
+          onClick={() =>
             mutate({
               matchId: item.apiMatchId,
               homeScore: parseInt(homeScore),
@@ -271,12 +263,10 @@ export const MatchCard: FC<MatchCardProps> = ({ item }) => {
                 : undefined,
             })
           }
-
-          }
-          className="mt-auto border-none bg-red-600 hover:bg-red-700 disabled:bg-brand-card disabled:text-text-muted text-white font-semibold text-[14px] py-2.5 transition-all active:scale-[0.99] cursor-pointer"
+          className="mt-auto border-none bg-red-600 hover:bg-red-700 disabled:bg-brand-card disabled:text-text-muted text-white font-semibold text-sm py-2.5 transition-all active:scale-[0.99] cursor-pointer"
         >
-          {isStarted ? <Lock className="w-4 h-4 mr-2" /> : null}
-          {isPending ? <Loader className="w-4 h-4 mr-2 animate-spin" /> : null}
+          {isStarted ? <Lock className="size-4 me-2" /> : null}
+          {isPending ? <Loader className="size-4 me-2 animate-spin" /> : null}
           {bet ? "Update Prediction" : "Submit Prediction"}
         </Button>
       )}

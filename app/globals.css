@@ -2,6 +2,8 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+@variant dark (&:where(.force-disable-dark-mode-never-match));
+
 @theme inline {
   --color-brand-page: var(--brand-page);
   --color-brand-container: var(--brand-container);
@@ -53,6 +55,9 @@
 }
 
 :root {
+  color-scheme: only light;
+  forced-color-adjust: none;
+
   --brand-page: #0d1117;
   --brand-container: #151b23;
   --brand-card: #1c2128;
@@ -69,7 +74,6 @@
   --success-hover: #059669;
   --success-disabled: #065f46;
   --error: #f87171;
-
 
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);

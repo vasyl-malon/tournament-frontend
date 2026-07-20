@@ -160,8 +160,8 @@ export const BonusPredictionForm: FC<BonusPredictionForm> = ({ data }) => {
       onSubmit={form.handleSubmit(handleSubmit)}
       className="w-full space-y-6 text-white"
     >
-      <div className="p-6 bg-color-background rounded-md border border-[#3d444d] space-y-6">
-        <div className="pb-3 border-b border-[#3d444d]/50">
+      <div className="p-6 bg-color-background rounded-md border border-brand-border space-y-6">
+        <div className="pb-3 border-b border-brand-border/50">
           <h2 className="text-xl font-bold tracking-wide">
             Make Your Bonus Predictions
           </h2>
@@ -170,7 +170,7 @@ export const BonusPredictionForm: FC<BonusPredictionForm> = ({ data }) => {
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="flex flex-col gap-y-6 p-4 rounded-md border border-[#3d444d]/60 bg-[#1c2128]/40">
+          <div className="flex flex-col gap-y-6 p-4 rounded-md border border-brand-border/60 bg-[#1c2128]/40">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Crown className="size-4" />
@@ -225,7 +225,7 @@ export const BonusPredictionForm: FC<BonusPredictionForm> = ({ data }) => {
               </ComboboxContent>
             </Combobox>
           </div>
-          <div className="flex flex-col gap-y-6 p-4 rounded-md border border-[#3d444d]/60 bg-[#1c2128]/40">
+          <div className="flex flex-col gap-y-6 p-4 rounded-md border border-brand-border/60 bg-[#1c2128]/40">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Award className="size-4" />
@@ -280,7 +280,7 @@ export const BonusPredictionForm: FC<BonusPredictionForm> = ({ data }) => {
               </ComboboxContent>
             </Combobox>
           </div>
-          <div className="flex flex-col gap-y-6 p-4 rounded-md border border-[#3d444d]/60 bg-[#1c2128]/40">
+          <div className="flex flex-col gap-y-6 p-4 rounded-md border border-brand-border/60 bg-[#1c2128]/40">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Star className="size-4" />
@@ -337,7 +337,7 @@ export const BonusPredictionForm: FC<BonusPredictionForm> = ({ data }) => {
           </div>
         </div>
         {data?.tournamentStatus === "UPCOMING" ? (
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between pt-4 border-t border-[#3d444d]/50 gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between pt-4 border-t border-brand-border/50 gap-4">
             <button
               type="submit"
               disabled={isPending}

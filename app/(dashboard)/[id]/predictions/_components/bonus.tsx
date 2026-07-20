@@ -77,8 +77,8 @@ export function BonusPredictions({ predictions }: BonusPredictionsProps) {
   ];
 
   return (
-    <div className="flex flex-col gap-y-6 p-6 bg-[#151b23] rounded-md border border-[#3d444d] text-white w-full">
-      <div className="flex pb-3 border-b border-[#3d444d]/50">
+    <div className="flex flex-col gap-y-6 p-6 bg-brand-container rounded-md border border-brand-border text-white w-full">
+      <div className="flex pb-3 border-b border-brand-border/50">
         <h2 className="text-xl font-bold tracking-wide">Your Bonus Predictions</h2>
       </div>
 
@@ -97,7 +97,7 @@ export function BonusPredictions({ predictions }: BonusPredictionsProps) {
           return (
             <div
               key={index}
-              className="flex flex-col justify-between p-4 rounded-md border border-[#3d444d]/60 bg-[#1c2128]/40 min-h-[120px] transition-all duration-200 hover:border-[#3d444d]"
+              className="flex flex-col justify-between p-4 rounded-md border border-brand-border/60 bg-[#1c2128]/40 min-h-[120px] transition-all duration-200 hover:border-brand-border"
             >
               {/* Верхня плашка: Іконка + Назва номінації */}
               <div className="flex items-center justify-between">
@@ -127,7 +127,7 @@ export function BonusPredictions({ predictions }: BonusPredictionsProps) {
                   ) : (
                     // Плейсхолдер, якщо користувач ще не зробив вибір
                     !hasPredicted && (
-                      <div className="size-5 border border-dashed border-[#3d444d] rounded-full shrink-0" />
+                      <div className="size-5 border border-dashed border-brand-border rounded-full shrink-0" />
                     )
                   )}
                   <span className={`text-sm font-medium tracking-wide truncate ${hasPredicted ? "text-white" : "text-gray-500 italic"}`}>
@@ -138,7 +138,7 @@ export function BonusPredictions({ predictions }: BonusPredictionsProps) {
                 {/* Відображення балів/статусу */}
                 <div className="text-xs font-bold tracking-wide pb-0.5">
                   {isPending && (
-                    <span className="text-gray-400 bg-[#30363d]/50 px-2 py-0.5 rounded text-[11px] border border-[#3d444d]/30">
+                    <span className="text-gray-400 bg-[#30363d]/50 px-2 py-0.5 rounded text-[11px] border border-brand-border/30">
                       Pending
                     </span>
                   )}

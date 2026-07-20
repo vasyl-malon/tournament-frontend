@@ -49,7 +49,7 @@ export function UserStatsCards({ statistic }: UserStatsProps) {
         return (
           <Card
             key={stat.title}
-            className="bg-[#151b23] border-[#3d444d] text-white rounded-md"
+            className="bg-brand-container border-brand-border text-white rounded-md"
           >
             <CardContent className="py-4 px-6 flex flex-col items-center justify-center text-center gap-3">
               <Icon className={cn("size-8 stroke-[1.5]", stat.iconColor)} />

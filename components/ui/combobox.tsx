@@ -86,7 +86,7 @@ function ComboboxInput({
   return (
     <InputGroup
       className={cn(
-        "w-full h-10 bg-[#151b23] border border-[#3d444d] rounded-[0.25rem] shadow-sm transition-all duration-200 focus-within:border-emerald-500 focus-within:ring-2 focus-within:ring-emerald-500/20",
+        "w-full h-10 bg-brand-container border border-brand-border rounded-[0.25rem] shadow-sm transition-all duration-200 focus-within:border-emerald-500 focus-within:ring-2 focus-within:ring-emerald-500/20",
         disabled && "opacity-50 cursor-not-allowed",
         className,
       )}
@@ -145,7 +145,7 @@ function ComboboxContent({
           data-slot="combobox-content"
           data-chips={!!anchor}
           className={cn(
-            "group/combobox-content relative max-h-(--available-height) w-(--anchor-width) max-w-(--available-width) min-w-[calc(var(--anchor-width)+--spacing(7))] origin-(--transform-origin) overflow-hidden rounded-xl bg-[#151b23] text-gray-100 shadow-[0_12px_30px_rgba(0,0,0,0.6)] border border-[#3d444d] duration-150 data-[chips=true]:min-w-(--anchor-width) data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 *:data-[slot=input-group]:m-1.5 *:data-[slot=input-group]:mb-1 *:data-[slot=input-group]:h-9 *:data-[slot=input-group]:border-[#3d444d]/60 *:data-[slot=input-group]:bg-[#0d1117] *:data-[slot=input-group]:shadow-none data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
+            "group/combobox-content relative max-h-(--available-height) w-(--anchor-width) max-w-(--available-width) min-w-[calc(var(--anchor-width)+--spacing(7))] origin-(--transform-origin) overflow-hidden rounded-xl bg-brand-container text-gray-100 shadow-[0_12px_30px_rgba(0,0,0,0.6)] border border-brand-border duration-150 data-[chips=true]:min-w-(--anchor-width) data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 *:data-[slot=input-group]:m-1.5 *:data-[slot=input-group]:mb-1 *:data-[slot=input-group]:h-9 *:data-[slot=input-group]:border-brand-border/60 *:data-[slot=input-group]:bg-[#0d1117] *:data-[slot=input-group]:shadow-none data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
             className,
           )}
           {...props}
@@ -261,7 +261,7 @@ function ComboboxChips({
     <ComboboxPrimitive.Chips
       data-slot="combobox-chips"
       className={cn(
-        "flex min-h-11 flex-wrap items-center gap-1.5 rounded-[0.5rem] border border-[#3d444d] bg-[#0d1117] bg-clip-padding px-3 py-2 text-[15px] transition-all duration-200 focus-within:border-emerald-500 focus-within:ring-2 focus-within:ring-emerald-500/20 has-aria-invalid:border-destructive has-aria-invalid:ring-3 has-aria-invalid:ring-destructive/20 has-data-[slot=combobox-chip]:px-2",
+        "flex min-h-11 flex-wrap items-center gap-1.5 rounded-[0.5rem] border border-brand-border bg-[#0d1117] bg-clip-padding px-3 py-2 text-[15px] transition-all duration-200 focus-within:border-emerald-500 focus-within:ring-2 focus-within:ring-emerald-500/20 has-aria-invalid:border-destructive has-aria-invalid:ring-3 has-aria-invalid:ring-destructive/20 has-data-[slot=combobox-chip]:px-2",
         className,
       )}
       {...props}
@@ -281,7 +281,7 @@ function ComboboxChip({
     <ComboboxPrimitive.Chip
       data-slot="combobox-chip"
       className={cn(
-        "flex h-7 w-fit items-center justify-center gap-1.5 rounded-[0.375rem] bg-[#21262d] border border-[#30363d] px-2.5 text-xs font-semibold whitespace-nowrap text-gray-200 transition-colors hover:border-[#3d444d] has-disabled:pointer-events-none has-disabled:cursor-not-allowed has-disabled:opacity-50 has-data-[slot=combobox-chip-remove]:pr-0.5",
+        "flex h-7 w-fit items-center justify-center gap-1.5 rounded-[0.375rem] bg-[#21262d] border border-[#30363d] px-2.5 text-xs font-semibold whitespace-nowrap text-gray-200 transition-colors hover:border-brand-border has-disabled:pointer-events-none has-disabled:cursor-not-allowed has-disabled:opacity-50 has-data-[slot=combobox-chip-remove]:pr-0.5",
         className,
       )}
       {...props}
@@ -439,10 +439,10 @@ export {
 //   return (
 //     <InputGroup
 //       className={cn(
-//         "w-full h-10 bg-[#151b23] rounded-[0.25rem] shadow-sm transition-all duration-200",
+//         "w-full h-10 bg-brand-container rounded-[0.25rem] shadow-sm transition-all duration-200",
 //         hasError
 //           ? "border border-red-500 ring-2 ring-red-500/20"
-//           : "border border-[#3d444d] focus-within:border-emerald-500 focus-within:ring-2 focus-within:ring-emerald-500/20",
+//           : "border border-brand-border focus-within:border-emerald-500 focus-within:ring-2 focus-within:ring-emerald-500/20",
 //         disabled && "opacity-50 cursor-not-allowed",
 //         className,
 //       )}

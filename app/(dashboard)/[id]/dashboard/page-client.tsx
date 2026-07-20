@@ -34,7 +34,7 @@ export const Dashboard = () => {
 
   return (
     <div className="flex flex-col gap-y-10">
-      <div className="flex flex-col gap-y-2 p-6 bg-[#151b23] rounded-md border !border-[#3d444d]">
+      <div className="flex flex-col gap-y-2 p-6 bg-brand-container rounded-md border !border-brand-border">
         <span className="text-xl font-semibold">
           Welcome back, {user?.firstName} {user?.lastName}!
         </span>
@@ -55,7 +55,7 @@ export const Dashboard = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">{items}</div>
         </div>
 
-        <div className="flex flex-col gap-y-4 bg-[#151b23] text-white border !border-[#3d444d] rounded-md p-4 w-full h-fit">
+        <div className="flex flex-col gap-y-4 bg-brand-container text-white border !border-brand-border rounded-md p-4 w-full h-fit">
           <h2 className="text-md font-semibold">Bonus Predictions</h2>
           <div className="flex bg-red-100 text-red-700 text-sm p-2 rounded-md items-center">
             <Clock className="size-4 me-2" />

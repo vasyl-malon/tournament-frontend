@@ -176,7 +176,7 @@ export default function Header() {
 
           {/* 2. Випадаюче меню. Позиціонується рівно від низу хедера (top-full). */}
           <div
-            className="absolute top-full left-0 w-full bg-[#010409] border-b border-[#3d444d] px-6 py-6 flex flex-col gap-y-6 z-40 lg:hidden shadow-2xl animate-in fade-in slide-in-from-top-4 duration-250"
+            className="absolute top-full left-0 w-full bg-[#010409] border-b border-brand-border px-6 py-6 flex flex-col gap-y-6 z-40 lg:hidden shadow-2xl animate-in fade-in slide-in-from-top-4 duration-250"
             onClick={(e) => e.stopPropagation()} // Запобігає закриттю при кліках всередині меню
           >
             
@@ -188,10 +188,10 @@ export default function Header() {
                 disabled={isLoading || isFetching}
                 defaultValue={id}
               >
-                <SelectTrigger className="w-full bg-[#151b23] border-[#3d444d]">
+                <SelectTrigger className="w-full bg-brand-container border-brand-border">
                   <SelectValue placeholder="Tournament" />
                 </SelectTrigger>
-                <SelectContent className="bg-[#151b23] border-[#3d444d]">
+                <SelectContent className="bg-brand-container border-brand-border">
                   <SelectGroup>
                     {items.map((item) => (
                       <SelectItem
@@ -239,7 +239,7 @@ export default function Header() {
               </ul>
             </nav>
 
-            <hr className="border-[#3d444d]/50" />
+            <hr className="border-brand-border/50" />
 
             {/* Профіль та кнопка виходу */}
             <div className="flex items-center justify-between">
@@ -247,7 +247,7 @@ export default function Header() {
                 href={"/profile"}
                 className="flex items-center gap-3 text-sm font-medium hover:text-white transition-colors duration-200"
               >
-                <div className="p-2 bg-[#151b23] rounded-full border border-[#3d444d]">
+                <div className="p-2 bg-brand-container rounded-full border border-brand-border">
                   <User className="size-5 stroke-[2]" />
                 </div>
                 <div className="leading-tight">

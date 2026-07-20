@@ -29,9 +29,9 @@ export const MatchPredictions: FC<MatchPredictionsProps> = ({ bets }) => {
       {Object.entries(groupedBets).map(([stage, stageBets]) => (
         <div
           key={stage}
-          className="flex flex-col gap-y-4 p-6 bg-[#151b23] rounded-md border border-[#3d444d]"
+          className="flex flex-col gap-y-4 p-6 bg-brand-container rounded-md border border-brand-border"
         >
-          <div className="flex pb-2 border-b border-[#3d444d]/50">
+          <div className="flex pb-2 border-b border-brand-border/50">
             <h2 className="text-md font-bold tracking-wide uppercase text-gray-300">
               {formatStageName(stage)}
             </h2>
@@ -59,7 +59,7 @@ export const MatchPredictions: FC<MatchPredictionsProps> = ({ bets }) => {
                     "flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 rounded-md border",
                     "transition-all duration-200",
                     isPending &&
-                      "bg-[#1c2128] border-[#3d444d]/80 border-l-4 border-l-gray-500",
+                      "bg-[#1c2128] border-brand-border/80 border-l-4 border-l-gray-500",
                     isGreen &&
                       "bg-emerald-500/10 border-emerald-500/20 border-l-4 border-l-emerald-500",
                     isYellow &&
@@ -73,12 +73,14 @@ export const MatchPredictions: FC<MatchPredictionsProps> = ({ bets }) => {
                     <div className="flex items-center gap-3 font-semibold text-lg">
                       <div className="flex items-center gap-2">
                         <img
-                          src={bet.match.homeTeamLogo}
-                          alt={bet.match.homeTeam}
+                          src={bet.match.homeTeam.logo}
+                          alt={bet.match.homeTeam.name}
                           className="w-6 h-6 object-contain"
                         />
                         <span className="tracking-wider">
-                          {bet.match.homeTeam.substring(0, 3).toUpperCase()}
+                          {bet.match.homeTeam.name
+                            .substring(0, 3)
+                            .toUpperCase()}
                         </span>
                       </div>
                       <span className="text-gray-500 text-sm font-normal">
@@ -86,12 +88,14 @@ export const MatchPredictions: FC<MatchPredictionsProps> = ({ bets }) => {
                       </span>
                       <div className="flex items-center gap-2">
                         <img
-                          src={bet.match.awayTeamLogo}
-                          alt={bet.match.awayTeam}
+                          src={bet.match.awayTeam.logo}
+                          alt={bet.match.awayTeam.name}
                           className="w-6 h-6 object-contain"
                         />
                         <span className="tracking-wider">
-                          {bet.match.awayTeam.substring(0, 3).toUpperCase()}
+                          {bet.match.awayTeam.name
+                            .substring(0, 3)
+                            .toUpperCase()}
                         </span>
                       </div>
                     </div>
@@ -126,7 +130,7 @@ export const MatchPredictions: FC<MatchPredictionsProps> = ({ bets }) => {
                     <div className="flex gap-4 text-sm">
                       <div className="flex flex-col items-center">
                         <span className="text-gray-400 text-xs mb-1">You</span>
-                        <span className="font-mono font-bold bg-[#0d1117]/60 px-2.5 py-1 rounded border border-[#3d444d]/40">
+                        <span className="font-mono font-bold bg-[#0d1117]/60 px-2.5 py-1 rounded border border-brand-border/40">
                           {bet.homeScore} - {bet.awayScore}
                         </span>
                       </div>
@@ -140,7 +144,7 @@ export const MatchPredictions: FC<MatchPredictionsProps> = ({ bets }) => {
                             Not played
                           </span>
                         ) : (
-                          <span className="font-mono font-bold bg-[#0d1117]/60 px-2.5 py-1 rounded border border-[#3d444d]/40">
+                          <span className="font-mono font-bold bg-[#0d1117]/60 px-2.5 py-1 rounded border border-brand-border/40">
                             {bet.match.homeScore} - {bet.match.awayScore}
                           </span>
                         )}

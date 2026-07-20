@@ -6,7 +6,7 @@ interface RankCardProps {
 }
 
 export const RankCard: FC<RankCardProps> = ({ username, rank = 0 }) => (
-  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 bg-[#151b23] rounded-md border !border-[#3d444d]">
+  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 bg-brand-container rounded-md border !border-brand-border">
     <div className="flex flex-col gap-y-1">
       <span className="text-xl font-semibold">Predictions</span>
       <span className="text-md text-gray-400">

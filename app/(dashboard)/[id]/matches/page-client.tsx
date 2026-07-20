@@ -138,7 +138,7 @@ export function Matches() {
 
   return (
     <div className="space-y-6">
-      <div className="flex max-md:flex-col gap-4 justify-between items-start md:items-center border-b border-[#3d444d]/40 pb-4">
+      <div className="flex max-md:flex-col gap-4 justify-between items-start md:items-center border-b border-brand-border/40 pb-4">
         <h1 className="text-2xl font-semibold text-white">Matches</h1>
 
         {stages.length > 1 && activeStage && (
@@ -148,7 +148,7 @@ export function Matches() {
             className="w-full md:w-auto"
             // orientation="vertical"
           >
-            <TabsList className="bg-[#151b23] border !border-[#3d444d] flex flex-wrap gap-y-1 h-auto p-1 w-full">
+            <TabsList className="bg-brand-container border !border-brand-border flex flex-wrap gap-y-1 h-auto p-1 w-full">
               {stages.map((stage) => (
                 <TabsTrigger
                   key={stage}
@@ -177,7 +177,7 @@ export function Matches() {
                     className={`px-4 py-1.5 text-xs font-medium rounded-full border whitespace-nowrap transition-all cursor-pointer ${
                       isActive
                         ? "bg-[#3d444d] text-white border-slate-400"
-                        : "bg-[#151b23] text-[#9198a1] border-[#3d444d] hover:text-white hover:border-slate-500"
+                        : "bg-brand-container text-[#9198a1] border-brand-border hover:text-white hover:border-slate-500"
                     }`}
                   >
                     {matchdayKey.replace("_", " ")}

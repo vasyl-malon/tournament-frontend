@@ -60,7 +60,7 @@ export function RegisterForm({
   return (
     <Card
       className={cn(
-        "!text-white border !border-[#3d444d] rounded-md w-full max-w-md",
+        "!text-white border !border-brand-border rounded-md w-full max-w-md",
         className,
       )}
       {...props}

@@ -34,8 +34,7 @@ export const matchApi = {
 
   addBet: async (params: AddBetParams) => {
     const res = await api.post<object>(`/matches/bets/${params.matchId}`, {
-      homeScore: params.homeScore,
-      awayScore: params.awayScore,
+      ...params,
     });
     return res.data;
   },
@@ -45,9 +44,10 @@ export const matchApi = {
     return res.data;
   },
 
-
   getBonusPrediction: async (params: GetBonusPredictionParams) => {
-    const res = await api.get<GetBonusPredictionResponse>(`/matches/bonus`, { params });
+    const res = await api.get<GetBonusPredictionResponse>(`/matches/bonus`, {
+      params,
+    });
     return res.data;
   },
 

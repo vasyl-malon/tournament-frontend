@@ -73,12 +73,12 @@ export const MatchPredictions: FC<MatchPredictionsProps> = ({ bets }) => {
                     <div className="flex items-center gap-3 font-semibold text-lg">
                       <div className="flex items-center gap-2">
                         <img
-                          src={bet.match.homeTeam.logo}
-                          alt={bet.match.homeTeam.name}
+                          src={bet.match.homeTeam?.logo}
+                          alt={bet.match.homeTeam?.name}
                           className="w-6 h-6 object-contain"
                         />
                         <span className="tracking-wider">
-                          {bet.match.homeTeam.name
+                          {bet.match.homeTeam?.name
                             .substring(0, 3)
                             .toUpperCase()}
                         </span>
@@ -88,12 +88,12 @@ export const MatchPredictions: FC<MatchPredictionsProps> = ({ bets }) => {
                       </span>
                       <div className="flex items-center gap-2">
                         <img
-                          src={bet.match.awayTeam.logo}
-                          alt={bet.match.awayTeam.name}
+                          src={bet.match.awayTeam?.logo}
+                          alt={bet.match.awayTeam?.name}
                           className="w-6 h-6 object-contain"
                         />
                         <span className="tracking-wider">
-                          {bet.match.awayTeam.name
+                          {bet.match.awayTeam?.name
                             .substring(0, 3)
                             .toUpperCase()}
                         </span>

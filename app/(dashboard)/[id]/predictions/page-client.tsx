@@ -7,14 +7,18 @@ import { BonusPredictions } from "./_components/bonus";
 import { RankCard } from "./_components/rank";
 import { useAuthStore } from "@/store/auth.store";
 import { MatchPredictions } from "./_components/match-predictions";
+import { useSearchParams } from "next/navigation";
 
 export const Predictions = () => {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuthStore();
 
+  const searchParams = useSearchParams();
+  const userId = searchParams.get("userId");
+
   const { data, isLoading } = useGetUserBets(
     {
-      userId: user?.id.toString() || "",
+      userId: userId || user?.id.toString() || "",
       tournamentId: id,
     },
     { enabled: !!(user?.id && id) },

@@ -1,80 +1,96 @@
 "use client";
 
-import { useGetLeaderboard } from "@/api";
-import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
+import { useState } from "react";
 import { useParams } from "next/navigation";
-import { columns } from "./utils";
-import { BarChart2 } from "lucide-react";
+import { LayoutGrid, Table as TableIcon } from "lucide-react";
+import { useGetLeaderboard } from "@/api";
+import { Statistic } from "@/api/match/match.types";
+import { Skeleton } from "@/components/ui/skeleton";
+import { MobileCard } from "./mobile-card";
+import { TableView } from "./table-view";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useAuthStore } from "@/store/auth.store";
 
 export const LeaderboardTable = () => {
-  const { id } = useParams<{ id: string }>();
+  const { id: tournamentId } = useParams<{ id: string }>();
+  const { user } = useAuthStore();
+
+  const [viewMode, setViewMode] = useState<"table" | "cards">("cards");
 
   const { data, isLoading } = useGetLeaderboard({
-    tournamentId: id,
+    tournamentId,
   });
 
-  // eslint-disable-next-line react-hooks/incompatible-library
-  const table = useReactTable({
-    data: data?.data || [],
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
+  const leaderboardData: Statistic[] = data?.data || [];
+
+  const tabs = [
+    {
+      title: "Table",
+      value: "table",
+      icon: TableIcon,
+    },
+    {
+      title: "Cards",
+      value: "cards",
+      icon: LayoutGrid,
+    },
+  ];
 
   return (
-    <div className="flex flex-col gap-y-8">
-      <h1 className="flex gap-1.5 items-center text-2xl font-semibold">
-        <BarChart2 className="size-6" />
-        Leaderboard
-      </h1>
+    <div className="flex flex-col gap-y-6">
+      <div className="flex max-md:flex-col md:items-center justify-between gap-4">
+        <h1 className="text-2xl font-semibold text-white">Leaderboard</h1>
+        <Tabs
+          value={viewMode}
+          onValueChange={setViewMode}
+          className="w-full md:w-auto"
+        >
+          <TabsList className="bg-brand-container border !border-brand-border flex flex-wrap h-auto p-1 w-full gap-x-2">
+            {tabs.map((tab) => {
+              const Icon = tab.icon;
+
+              return (
+                <TabsTrigger
+                  key={tab.value}
+                  value={tab.value}
+                  className="w-full data-[state=active]:bg-brand-border data-[state=active]:text-white text-[#9198a1] uppercase text-xs px-3 py-1.5"
+                >
+                  <Icon className="size-3.5" />
+                  <span>{tab.title}</span>
+                </TabsTrigger>
+              );
+            })}
+          </TabsList>
+        </Tabs>
+      </div>
       {isLoading ? (
-        <Skeleton className="h-[40rem] w-full rounded-md" />
+        <Skeleton className="h-[24rem] md:h-[30rem] w-full rounded-md" />
+      ) : leaderboardData.length === 0 ? (
+        <div className="text-center py-20 px-8 text-text-muted border border-brand-border rounded-md bg-brand-container">
+          No participants found.
+        </div>
       ) : (
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="hover:bg-transparent">
-                {headerGroup.headers.map((header) => (
-                  <TableHead
-                    key={header.id}
-                    className="text-white font-semibold"
-                  >
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext(),
-                    )}
-                  </TableHead>
-                ))}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell
-                    key={cell.id}
-                    className="py-4 text-white font-medium"
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+        <>
+          {viewMode === "table" && (
+            <TableView
+              data={leaderboardData}
+              tournamentId={tournamentId}
+              currentUser={user?.id.toString()}
+            />
+          )}
+          {viewMode === "cards" && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+              {leaderboardData.map((item, index) => (
+                <MobileCard
+                  key={item.userId || index}
+                  item={item}
+                  tournamentId={tournamentId}
+                  isCurrentUser={user?.id.toString() === item.userId}
+                />
+              ))}
+            </div>
+          )}
+        </>
       )}
     </div>
   );

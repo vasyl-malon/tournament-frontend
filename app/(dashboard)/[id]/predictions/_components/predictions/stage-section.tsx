@@ -1,8 +1,8 @@
 import { FC } from "react";
 import { Award } from "lucide-react";
-import { Bet, MatchStage } from "@/api/match/match.types";
 import { MatchdaySection } from "./matchday-section";
 import { MATCH_STAGE_LABELS } from "@/lib/utils";
+import { Bet, MatchStage } from "@/api/common.types";
 
 interface StageSectionProps {
   stage: MatchStage;

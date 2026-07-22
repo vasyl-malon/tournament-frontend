@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetUserBets } from "@/api";
+import { useGetPredictions } from "@/api";
 import { useParams } from "next/navigation";
 import { UserStatsCards } from "./_components/user-stats-cards";
 import { BonusPredictions } from "./_components/bonus";
@@ -17,7 +17,7 @@ export const Predictions = () => {
   const searchParams = useSearchParams();
   const userId = searchParams.get("userId");
 
-  const { data, isLoading } = useGetUserBets(
+  const { data, isLoading } = useGetPredictions(
     {
       userId: userId || user?.id.toString() || "",
       tournamentId: id,

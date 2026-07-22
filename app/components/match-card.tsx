@@ -6,8 +6,8 @@ import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader, Lock, Shield, Trophy } from "lucide-react";
-import { Match, MatchStage, MatchStatus } from "@/api/match/match.types";
-import { useAddBet } from "@/api";
+import { Match, MatchStage, MatchStatus } from "@/api/common.types";
+import { useAddPrediction } from "@/api";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -17,7 +17,7 @@ type MatchCardProps = {
 };
 
 export const MatchCard: FC<MatchCardProps> = ({ item }) => {
-  const { isPending, mutate } = useAddBet();
+  const { isPending, mutate } = useAddPrediction();
   const bet = item.bets?.length ? item.bets[0] : null;
 
   const [homeScore, setHomeScore] = useState<string>(

@@ -1,15 +1,15 @@
 import { FC } from "react";
 import { Clock, CheckCircle2, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Bet } from "@/api/match/match.types";
 import Image from "next/image";
+import { Bet, MatchStatus } from "@/api/common.types";
 
 interface BetCardProps {
   bet: Bet;
 }
 
 export const BetCard: FC<BetCardProps> = ({ bet }) => {
-  const isFinished = bet.match.status === "FINISHED";
+  const isFinished = bet.match.status === MatchStatus.FINISHED;
   const isPending = !isFinished;
   const points = bet.pointsEarned ?? 0;
 

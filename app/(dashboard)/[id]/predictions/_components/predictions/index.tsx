@@ -1,9 +1,9 @@
 "use client";
 
 import { FC, useMemo } from "react";
-import { Bet, MatchStage } from "@/api/match/match.types";
 import { StageSection } from "./stage-section";
 import { groupBetsByStageAndMatchday } from "../utils";
+import { Bet, MatchStage } from "@/api/common.types";
 
 interface MatchPredictionsProps {
   bets: Array<Bet>;

@@ -1,8 +1,8 @@
 import { FC } from "react";
 import { CalendarDays } from "lucide-react";
-import { Bet } from "@/api/match/match.types";
 import { BetCard } from "./bet-card";
 import { formatMatchdayName } from "../utils";
+import { Bet } from "@/api/common.types";
 
 interface MatchdaySectionProps {
   matchday: string;

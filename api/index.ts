@@ -1,22 +1,25 @@
 import { useLogin, useRegister } from "./auth/auth.queries";
+import { useGetMatches } from "./match/match.queries";
 import {
-  useGetAllMatches,
-  useAddBet,
-  useGetMyBets,
-  useGetLeaderboard,
-  useGetUserBets,
-} from "./match/match.queries";
-
-import { useGetTeams, useGetPlayers } from "./tournament/tournaments.queries";
+  useGetPredictions,
+  useGetBonusPredictions,
+  useAddPrediction,
+  useAddBonusPrediction,
+} from "./prediction/prediction.queries";
+import { useGetTeams, useGetPlayers } from "./team/team.queries";
+import { useGetLeaderboard } from "./leaderboard/leaderboard.queries";
+import { useGetMyTournaments } from "./tournament/tournaments.queries";
 
 export {
   useLogin,
   useRegister,
-  useGetAllMatches,
-  useAddBet,
-  useGetMyBets,
+  useGetMatches,
   useGetLeaderboard,
-  useGetUserBets,
   useGetTeams,
   useGetPlayers,
+  useGetPredictions,
+  useGetBonusPredictions,
+  useAddPrediction,
+  useAddBonusPrediction,
+  useGetMyTournaments,
 };

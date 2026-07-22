@@ -1,7 +1,7 @@
 import { Trophy, Award, Target, CheckCircle2, GitCompare } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { Statistic } from "@/api/match/match.types";
+import { Statistic } from "@/api/common.types";
 
 interface UserStatsProps {
   statistic?: Statistic;

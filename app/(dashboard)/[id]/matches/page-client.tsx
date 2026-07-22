@@ -3,12 +3,12 @@
 import { useMemo, useState, useEffect, useCallback } from "react";
 import { useParams } from "next/navigation";
 import { CalendarX2 } from "lucide-react";
-import { useGetAllMatches } from "@/api";
 import { MatchCard } from "@/app/components/match-card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Match, MatchStatus } from "@/api/match/match.types";
 import { MATCH_STAGE_LABELS, cn } from "@/lib/utils";
+import { useGetMatches } from "@/api";
+import { Match, MatchStatus } from "@/api/common.types";
 
 type GroupedMatches = Record<string, Record<string, Match[]> | Match[]>;
 
@@ -25,7 +25,7 @@ export function Matches() {
   const [activeStage, setActiveStage] = useState<string>("");
   const [activeMatchday, setActiveMatchday] = useState<string>("");
 
-  const { data, isLoading } = useGetAllMatches({ tournamentId: id });
+  const { data, isLoading } = useGetMatches({ tournamentId: id });
 
   // eslint-disable-next-line react-hooks/preserve-manual-memoization
   const groupedMatches = useMemo(() => {

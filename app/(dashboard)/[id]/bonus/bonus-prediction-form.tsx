@@ -19,18 +19,17 @@ import {
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useDebounceValue } from "@/lib/hooks/use-debounce";
-import { useGetPlayers, useGetTeams } from "@/api";
-import { useAddBonusBet } from "@/api/match/match.queries";
+import { useGetPlayers, useGetTeams, useAddBonusPrediction } from "@/api";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import { BonusPredictionSchema } from "./bonus-prediction.schema";
 import { toast } from "sonner";
-import { GetBonusPredictionResponse } from "@/api/match/match.types";
 import { Button } from "@/components/ui/button";
+import { GetBonusPredictionsResponse } from "@/api/prediction/prediction.types";
 
 interface BonusPredictionFormProps {
-  data?: GetBonusPredictionResponse;
+  data?: GetBonusPredictionsResponse;
 }
 
 export const BonusPredictionForm: FC<BonusPredictionFormProps> = ({ data }) => {
@@ -86,7 +85,7 @@ export const BonusPredictionForm: FC<BonusPredictionFormProps> = ({ data }) => {
     name: "topScorerId",
   });
 
-  const { isPending, mutate } = useAddBonusBet();
+  const { isPending, mutate } = useAddBonusPrediction();
 
   const { data: playersData } = useGetPlayers({
     tournamentId: id || "",

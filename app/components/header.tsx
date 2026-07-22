@@ -18,7 +18,6 @@ import {
   BookOpen,
 } from "lucide-react";
 import { useAuthStore } from "@/store/auth.store";
-import { useGetMyTournament } from "@/api/tournament/tournaments.queries";
 import {
   Select,
   SelectContent,
@@ -29,6 +28,7 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useGetMyTournaments } from "@/api";
 
 const NAV_ITEMS = [
   { name: "Dashboard", href: "/dashboard", icon: Home },
@@ -48,7 +48,7 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  const { data, isLoading, isFetching } = useGetMyTournament();
+  const { data, isLoading, isFetching } = useGetMyTournaments();
 
   const tournamentOptions =
     data?.data?.map((item) => ({

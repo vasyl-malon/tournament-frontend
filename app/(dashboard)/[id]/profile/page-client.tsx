@@ -7,7 +7,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useAuthStore } from "@/store/auth.store";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { useGetMyTournament } from "@/api/tournament/tournaments.queries";
+import { useGetMyTournaments } from "@/api";
+
 interface TournamentParticipation {
   id: string;
   name: string;
@@ -41,7 +42,7 @@ export const Profile: FC<ProfileViewProps> = ({ data, isLoading }) => {
   const { user } = useAuthStore();
   const router = useRouter();
 
-  const { data: tournaments } = useGetMyTournament();
+  const { data: tournaments } = useGetMyTournaments();
 
   const firstName = data?.firstName ?? user?.firstName ?? "User";
   const lastName = data?.lastName ?? user?.lastName ?? "";

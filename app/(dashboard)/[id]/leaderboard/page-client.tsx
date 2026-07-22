@@ -4,12 +4,12 @@ import { useState } from "react";
 import { useParams } from "next/navigation";
 import { LayoutGrid, Table as TableIcon } from "lucide-react";
 import { useGetLeaderboard } from "@/api";
-import { Statistic } from "@/api/match/match.types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { MobileCard } from "./mobile-card";
 import { TableView } from "./table-view";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuthStore } from "@/store/auth.store";
+import { Statistic } from "@/api/common.types";
 
 export const LeaderboardTable = () => {
   const { id: tournamentId } = useParams<{ id: string }>();

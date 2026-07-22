@@ -1,75 +1,13 @@
-import { useMutation, useQuery, UseQueryOptions } from "@tanstack/react-query";
-import {
-  GetAllMatchesResponse,
-  GetAllMatchesParams,
-  AddBetParams,
-  GetLeaderboardParams,
-  GetLeaderboardResponse,
-  GetMyBetsResponse,
-  GetMyBetsParams,
-  GetUserBetsParams,
-  GetUserBetsResponse,
-  AddBonusBetParams,
-  GetBonusPredictionParams,
-  GetBonusPredictionResponse,
-} from "./match.types";
-import { AxiosError } from "axios";
+import { useQuery, UseQueryOptions } from "@tanstack/react-query";
+import { GetMatchesResponse, GetMatchesParams } from "./match.types";
 import { matchApi } from "./match.api";
 
-export const useGetAllMatches = (
-  params: GetAllMatchesParams,
-  queryParams?: Partial<UseQueryOptions<GetAllMatchesResponse>>,
+export const useGetMatches = (
+  params: GetMatchesParams,
+  queryParams?: Partial<UseQueryOptions<GetMatchesResponse>>,
 ) =>
   useQuery({
     queryKey: ["get-matches", params],
     queryFn: () => matchApi.getAll(params),
     ...queryParams,
-  });
-
-export const useGetMyBets = (params: GetMyBetsParams) =>
-  useQuery<GetMyBetsResponse, AxiosError>({
-    queryKey: ["get-bets", params],
-    queryFn: () => matchApi.getMyBets(params),
-  });
-
-export const useAddBet = () =>
-  useMutation<object, AxiosError, AddBetParams>({
-    mutationKey: ["add-bet"],
-    mutationFn: matchApi.addBet,
-  });
-
-export const useGetLeaderboard = (
-  params: GetLeaderboardParams,
-  queryParams?: Partial<UseQueryOptions<GetLeaderboardResponse>>,
-) =>
-  useQuery({
-    queryKey: ["get-leaderboard", params],
-    queryFn: () => matchApi.getAllLeaderboard(params),
-    ...queryParams,
-  });
-
-export const useGetUserBets = (
-  params: GetUserBetsParams,
-  queryParams?: Partial<UseQueryOptions<GetUserBetsResponse>>,
-) =>
-  useQuery({
-    queryKey: ["get-user-bets", params],
-    queryFn: () => matchApi.getUserBets(params),
-    ...queryParams,
-  });
-
-export const useGetBonusPrediction = (
-  params: GetBonusPredictionParams,
-  queryParams?: Partial<UseQueryOptions<GetBonusPredictionResponse>>,
-) =>
-  useQuery({
-    queryKey: ["get-bonus-prediction", params],
-    queryFn: () => matchApi.getBonusPrediction(params),
-    ...queryParams,
-  });
-
-export const useAddBonusBet = () =>
-  useMutation({
-    mutationKey: ["add-bonus-bet"],
-    mutationFn: matchApi.addBonusBet,
   });

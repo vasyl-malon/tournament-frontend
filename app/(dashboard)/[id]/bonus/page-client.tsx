@@ -2,13 +2,13 @@
 
 import { BonusPredictionForm } from "./bonus-prediction-form";
 import { useParams } from "next/navigation";
-import { useGetBonusPrediction } from "@/api/match/match.queries";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useGetBonusPredictions } from "@/api";
 
 export const BonusBetsPage = () => {
   const { id } = useParams<{ id: string }>();
 
-  const { data, isLoading } = useGetBonusPrediction(
+  const { data, isLoading } = useGetBonusPredictions(
     { tournamentId: id },
     { enabled: !!id },
   );

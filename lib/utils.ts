@@ -1,4 +1,4 @@
-import { MatchStage } from "@/api/match/match.types";
+import { MatchStage } from "@/api/common.types";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 

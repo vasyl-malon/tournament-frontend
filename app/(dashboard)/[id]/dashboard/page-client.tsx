@@ -1,8 +1,5 @@
 "use client";
 
-import { useGetAllMatches } from "@/api";
-import { useGetBonusPrediction } from "@/api/match/match.queries";
-import { MatchStatus } from "@/api/match/match.types";
 import { MatchCard } from "@/app/components/match-card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -19,6 +16,8 @@ import {
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { useGetBonusPredictions, useGetMatches } from "@/api";
+import { MatchStatus } from "@/api/common.types";
 
 const MATCHES_LIMIT = 4;
 
@@ -27,13 +26,13 @@ export const Dashboard = () => {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
 
-  const { data: matches, isLoading } = useGetAllMatches({
+  const { data: matches, isLoading } = useGetMatches({
     tournamentId: id,
     status: MatchStatus.SCHEDULED,
     limit: MATCHES_LIMIT,
   });
 
-  const { data: bonusData, isLoading: isBonusLoading } = useGetBonusPrediction(
+  const { data: bonusData, isLoading: isBonusLoading } = useGetBonusPredictions(
     { tournamentId: id },
     { enabled: !!id },
   );

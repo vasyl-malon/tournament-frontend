@@ -7,7 +7,7 @@ import {
   ColumnDef,
 } from "@tanstack/react-table";
 import { Trophy, ArrowRight } from "lucide-react";
-import { Statistic } from "@/api/match/match.types";
+import { Statistic } from "@/api/common.types";
 import { Button } from "@/components/ui/button";
 import {
   Table,

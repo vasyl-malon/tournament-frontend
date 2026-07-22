@@ -1,4 +1,4 @@
-import { Bet } from "@/api/common.types";
+import { Bet } from "@/lib/api/common.types";
 
 export type GroupedBets = Record<string, Record<string | number, Bet[]>>;
 

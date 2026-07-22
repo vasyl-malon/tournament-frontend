@@ -2,7 +2,7 @@ import { FC } from "react";
 import { Clock, CheckCircle2, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { Bet, MatchStatus } from "@/api/common.types";
+import { Bet, MatchStatus } from "@/lib/api/common.types";
 
 interface BetCardProps {
   bet: Bet;

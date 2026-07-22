@@ -19,14 +19,14 @@ import {
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useDebounceValue } from "@/lib/hooks/use-debounce";
-import { useGetPlayers, useGetTeams, useAddBonusPrediction } from "@/api";
+import { useGetPlayers, useGetTeams, useAddBonusPrediction } from "@/lib/api";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import { BonusPredictionSchema } from "./bonus-prediction.schema";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { GetBonusPredictionsResponse } from "@/api/prediction/prediction.types";
+import { GetBonusPredictionsResponse } from "@/lib/api/prediction/prediction.types";
 
 interface BonusPredictionFormProps {
   data?: GetBonusPredictionsResponse;

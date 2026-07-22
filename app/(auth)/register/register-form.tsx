@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { useRegister } from "@/api";
+import { useRegister } from "@/lib/api";
 import { Spinner } from "@/components/ui/spinner";
 import z from "zod";
 import { useForm } from "react-hook-form";

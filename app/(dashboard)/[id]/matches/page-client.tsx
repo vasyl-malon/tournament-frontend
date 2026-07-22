@@ -7,8 +7,8 @@ import { MatchCard } from "@/app/components/match-card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
 import { MATCH_STAGE_LABELS, cn } from "@/lib/utils";
-import { useGetMatches } from "@/api";
-import { Match, MatchStatus } from "@/api/common.types";
+import { useGetMatches } from "@/lib/api";
+import { Match, MatchStatus } from "@/lib/api/common.types";
 
 type GroupedMatches = Record<string, Record<string, Match[]> | Match[]>;
 

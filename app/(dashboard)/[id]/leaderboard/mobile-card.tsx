@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { FC } from "react";
-import { Statistic } from "@/api/common.types";
+import { Statistic } from "@/lib/api/common.types";
 
 interface MobileCardProps {
   item: Statistic;

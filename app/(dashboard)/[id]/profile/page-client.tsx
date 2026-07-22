@@ -7,7 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useAuthStore } from "@/store/auth.store";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { useGetMyTournaments } from "@/api";
+import { useGetMyTournaments } from "@/lib/api";
 
 interface TournamentParticipation {
   id: string;

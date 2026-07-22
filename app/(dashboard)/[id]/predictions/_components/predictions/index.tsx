@@ -3,7 +3,7 @@
 import { FC, useMemo } from "react";
 import { StageSection } from "./stage-section";
 import { groupBetsByStageAndMatchday } from "../utils";
-import { Bet, MatchStage } from "@/api/common.types";
+import { Bet, MatchStage } from "@/lib/api/common.types";
 
 interface MatchPredictionsProps {
   bets: Array<Bet>;

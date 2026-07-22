@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { useGetMyTournaments } from "@/api";
+import { useGetMyTournaments } from "@/lib/api";
 
 const NAV_ITEMS = [
   { name: "Dashboard", href: "/dashboard", icon: Home },

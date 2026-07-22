@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetPredictions } from "@/api";
+import { useGetPredictions } from "@/lib/api";
 import { useParams } from "next/navigation";
 import { UserStatsCards } from "./_components/user-stats-cards";
 import { BonusPredictions } from "./_components/bonus";

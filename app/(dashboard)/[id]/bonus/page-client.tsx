@@ -3,7 +3,7 @@
 import { BonusPredictionForm } from "./bonus-prediction-form";
 import { useParams } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useGetBonusPredictions } from "@/api";
+import { useGetBonusPredictions } from "@/lib/api";
 
 export const BonusBetsPage = () => {
   const { id } = useParams<{ id: string }>();

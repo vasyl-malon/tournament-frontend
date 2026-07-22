@@ -16,8 +16,8 @@ import {
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { useGetBonusPredictions, useGetMatches } from "@/api";
-import { MatchStatus } from "@/api/common.types";
+import { useGetBonusPredictions, useGetMatches } from "@/lib/api";
+import { MatchStatus } from "@/lib/api/common.types";
 
 const MATCHES_LIMIT = 4;
 

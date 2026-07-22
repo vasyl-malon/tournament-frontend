@@ -5,7 +5,7 @@ import { BetCard } from "./bet-card";
 import { formatMatchdayName } from "../utils";
 
 interface MatchdaySectionProps {
-  matchday: string | number;
+  matchday: string;
   bets: Bet[];
 }
 

@@ -1,13 +1,23 @@
 "use client";
 
+import { useMemo, useState, useEffect, useCallback } from "react";
+import { useParams } from "next/navigation";
+import { CalendarX2 } from "lucide-react";
 import { useGetAllMatches } from "@/api";
 import { MatchCard } from "@/app/components/match-card";
-import { useParams } from "next/navigation";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useState, useEffect, useMemo } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Match, MatchStatus } from "@/api/match/match.types";
+import { MATCH_STAGE_LABELS, cn } from "@/lib/utils";
 
 type GroupedMatches = Record<string, Record<string, Match[]> | Match[]>;
+
+const formatMatchdayKey = (key: string) => {
+  return key
+    .replace(/_/g, " ")
+    .toLowerCase()
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+};
 
 export function Matches() {
   const { id } = useParams<{ id: string }>();
@@ -15,17 +25,17 @@ export function Matches() {
   const [activeStage, setActiveStage] = useState<string>("");
   const [activeMatchday, setActiveMatchday] = useState<string>("");
 
-  const { data } = useGetAllMatches({ tournamentId: id });
+  const { data, isLoading } = useGetAllMatches({ tournamentId: id });
 
   // eslint-disable-next-line react-hooks/preserve-manual-memoization
-  const newItems = useMemo(() => {
+  const groupedMatches = useMemo(() => {
     if (!data?.data) return {} as GroupedMatches;
 
-    return data.data.reduce((acc, match) => {
+    return data.data.reduce<GroupedMatches>((acc, match) => {
       const stage = match.stage || "UNKNOWN_STAGE";
       const currentMatchday = match.matchday ?? match.matchWeek;
 
-      if (currentMatchday) {
+      if (currentMatchday !== undefined && currentMatchday !== null) {
         if (!acc[stage] || Array.isArray(acc[stage])) {
           acc[stage] = {};
         }
@@ -41,58 +51,69 @@ export function Matches() {
         (acc[stage] as Match[]).push(match);
       }
       return acc;
-    }, {} as GroupedMatches);
+    }, {});
   }, [data?.data]);
 
-  const stages = useMemo(() => Object.keys(newItems), [newItems]);
+  const stages = useMemo(() => Object.keys(groupedMatches), [groupedMatches]);
 
-  const calculateBestMatchdayForStage = (
-    stage: string,
-    stageValue: any,
-  ): string => {
-    if (!data?.data || Array.isArray(stageValue)) return "";
+  const calculateBestMatchdayForStage = useCallback(
+    // eslint-disable-next-line react-hooks/preserve-manual-memoization, @typescript-eslint/no-explicit-any
+    (stage: string, stageValue: any): string => {
+      if (!data?.data || Array.isArray(stageValue)) return "";
 
-    const stageMatches = data.data.filter((m) => m.stage === stage);
-    const live = stageMatches.find((m) => m.status === MatchStatus.LIVE);
+      const stageMatches = data.data.filter((m) => m.stage === stage);
 
-    if (live) {
-      const md = live.matchday ?? live.matchWeek;
-      if (md) return `MATCHDAY_${md}`;
-    }
-
-    const upcoming = stageMatches
-      .filter((m) => m.status === MatchStatus.SCHEDULED)
-      .sort(
-        (a, b) =>
-          new Date(a.utcDate || a.startTime).getTime() -
-          new Date(b.utcDate || b.startTime).getTime(),
+      const liveMatch = stageMatches.find(
+        (m) =>
+          m.status === MatchStatus.LIVE ||
+          (m.status as unknown as string) === "LIVE",
       );
+      if (liveMatch) {
+        const md = liveMatch.matchday ?? liveMatch.matchWeek;
+        if (md) return `MATCHDAY_${md}`;
+      }
 
-    if (upcoming.length > 0) {
-      const md = upcoming[0].matchday ?? upcoming[0].matchWeek;
-      if (md) return `MATCHDAY_${md}`;
-    }
+      const upcoming = stageMatches
+        .filter((m) => m.status === MatchStatus.SCHEDULED)
+        .sort(
+          (a, b) =>
+            new Date(a.utcDate || a.startTime).getTime() -
+            new Date(b.utcDate || b.startTime).getTime(),
+        );
 
-    const finished = stageMatches
-      .filter((m) => m.status === "FINISHED")
-      .sort(
-        (a, b) =>
-          new Date(b.utcDate || b.startTime).getTime() -
-          new Date(a.utcDate || a.startTime).getTime(),
-      );
-    if (finished.length > 0) {
-      const md = finished[0].matchday ?? finished[0].matchWeek;
-      if (md) return `MATCHDAY_${md}`;
-    }
+      if (upcoming.length > 0) {
+        const md = upcoming[0].matchday ?? upcoming[0].matchWeek;
+        if (md) return `MATCHDAY_${md}`;
+      }
 
-    return Object.keys(stageValue)[0] || "";
-  };
+      const finished = stageMatches
+        .filter((m) => m.status === MatchStatus.FINISHED)
+        .sort(
+          (a, b) =>
+            new Date(b.utcDate || b.startTime).getTime() -
+            new Date(a.utcDate || a.startTime).getTime(),
+        );
+
+      if (finished.length > 0) {
+        const md = finished[0].matchday ?? finished[0].matchWeek;
+        if (md) return `MATCHDAY_${md}`;
+      }
+
+      return Object.keys(stageValue)[0] || "";
+    },
+    [data?.data],
+  );
 
   useEffect(() => {
     if (stages.length > 0 && !activeStage && data?.data) {
       let initialStage = stages[0];
 
-      const liveMatch = data.data.find((m) => m.status === MatchStatus.LIVE);
+      const liveMatch = data.data.find(
+        (m) =>
+          m.status === MatchStatus.LIVE ||
+          (m.status as unknown as string) === "LIVE",
+      );
+
       if (liveMatch?.stage && stages.includes(liveMatch.stage)) {
         initialStage = liveMatch.stage;
       } else {
@@ -103,6 +124,7 @@ export function Matches() {
               new Date(a.utcDate || a.startTime).getTime() -
               new Date(b.utcDate || b.startTime).getTime(),
           );
+
         if (
           upcoming.length > 0 &&
           upcoming[0].stage &&
@@ -112,18 +134,25 @@ export function Matches() {
         }
       }
 
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setActiveStage(initialStage);
-      const stageValue = newItems[initialStage];
+      const stageValue = groupedMatches[initialStage];
       setActiveMatchday(
         calculateBestMatchdayForStage(initialStage, stageValue),
       );
     }
-  }, [stages, data?.data, activeStage, newItems]);
+  }, [
+    stages,
+    data?.data,
+    activeStage,
+    groupedMatches,
+    calculateBestMatchdayForStage,
+  ]);
 
   const handleStageChange = (stage: string) => {
     setActiveStage(stage);
 
-    const stageValue = newItems[stage];
+    const stageValue = groupedMatches[stage];
     if (stageValue && !Array.isArray(stageValue)) {
       const bestMatchday = calculateBestMatchdayForStage(stage, stageValue);
       setActiveMatchday(bestMatchday);
@@ -132,30 +161,53 @@ export function Matches() {
     }
   };
 
-  if (!data) return <div className="text-[#9198a1]">Loading...</div>;
-  if (data.data.length === 0)
-    return <div className="text-[#9198a1]">No matches found</div>;
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-brand-border/40 pb-4">
+          <Skeleton className="h-8 w-36 rounded-md " />
+          <Skeleton className="h-10 w-full md:w-64 rounded-md" />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <Skeleton key={i} className="h-64 w-full rounded-md" />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (!data || data.data.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center p-12 bg-brand-container border border-brand-border rounded-md text-center space-y-4">
+        <CalendarX2 className="size-8 text-gray-500" />
+        <p className="text-gray-400 text-sm font-medium">
+          No matches found for this tournament.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
       <div className="flex max-md:flex-col gap-4 justify-between items-start md:items-center border-b border-brand-border/40 pb-4">
-        <h1 className="text-2xl font-semibold text-white">Matches</h1>
-
+        <h1 className="text-2xl font-semibold text-white tracking-tight">
+          Matches
+        </h1>
         {stages.length > 1 && activeStage && (
           <Tabs
             value={activeStage}
             onValueChange={handleStageChange}
             className="w-full md:w-auto"
-            // orientation="vertical"
           >
             <TabsList className="bg-brand-container border !border-brand-border flex flex-wrap gap-y-1 h-auto p-1 w-full">
               {stages.map((stage) => (
                 <TabsTrigger
                   key={stage}
                   value={stage}
-                  className="w-full data-[state=active]:bg-[#3d444d] data-[state=active]:text-white text-[#9198a1] uppercase text-xs px-3 py-1.5"
+                  className="w-full text-gray-400 uppercase text-xs px-3 py-1.5"
                 >
-                  {stage.replace("_", " ")}
+                  {MATCH_STAGE_LABELS[stage as keyof typeof MATCH_STAGE_LABELS]}
                 </TabsTrigger>
               ))}
             </TabsList>
@@ -164,35 +216,36 @@ export function Matches() {
       </div>
 
       {activeStage &&
-        newItems[activeStage] &&
-        !Array.isArray(newItems[activeStage]) && (
-          <div className="flex gap-x-2 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-[#3d444d] scrollbar-track-transparent">
-            {Object.keys(newItems[activeStage] as Record<string, any[]>).map(
-              (matchdayKey) => {
-                const isActive = activeMatchday === matchdayKey;
-                return (
-                  <button
-                    key={matchdayKey}
-                    onClick={() => setActiveMatchday(matchdayKey)}
-                    className={`px-4 py-1.5 text-xs font-medium rounded-full border whitespace-nowrap transition-all cursor-pointer ${
-                      isActive
-                        ? "bg-[#3d444d] text-white border-slate-400"
-                        : "bg-brand-container text-[#9198a1] border-brand-border hover:text-white hover:border-slate-500"
-                    }`}
-                  >
-                    {matchdayKey.replace("_", " ")}
-                  </button>
-                );
-              },
-            )}
+        groupedMatches[activeStage] &&
+        !Array.isArray(groupedMatches[activeStage]) && (
+          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none">
+            {Object.keys(
+              groupedMatches[activeStage] as Record<string, Match[]>,
+            ).map((matchdayKey) => {
+              const isActive = activeMatchday === matchdayKey;
+              return (
+                <button
+                  key={matchdayKey}
+                  onClick={() => setActiveMatchday(matchdayKey)}
+                  className={cn(
+                    "px-3.5 py-1.5 text-xs font-semibold rounded-xl border whitespace-nowrap transition-all cursor-pointer active:scale-95",
+                    isActive
+                      ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/40 shadow-sm"
+                      : "bg-brand-container text-gray-400 border-brand-border hover:text-white hover:border-brand-border-muted",
+                  )}
+                >
+                  {formatMatchdayKey(matchdayKey)}
+                </button>
+              );
+            })}
           </div>
         )}
 
-      <div className="pt-2">
+      <div className="pt-1">
         {activeStage &&
-          newItems[activeStage] &&
+          groupedMatches[activeStage] &&
           (() => {
-            const currentStageValue = newItems[activeStage];
+            const currentStageValue = groupedMatches[activeStage];
 
             if (Array.isArray(currentStageValue)) {
               return (
@@ -209,8 +262,8 @@ export function Matches() {
 
             if (matchesForSelectedMatchday.length === 0) {
               return (
-                <div className="text-sm text-[#9198a1]">
-                  No matches in this matchday
+                <div className="text-sm text-gray-400 p-8 text-center bg-brand-container/40 rounded-md border border-brand-border/40">
+                  No matches found in this matchday.
                 </div>
               );
             }

@@ -1,6 +1,14 @@
 import { FC, useEffect, useState } from "react";
-import { Crown, Award, Star, Save, Loader2 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import {
+  Crown,
+  Award,
+  Star,
+  Save,
+  Loader,
+  Lock,
+  Sparkles,
+  HelpCircle,
+} from "lucide-react";
 import {
   Combobox,
   ComboboxContent,
@@ -19,12 +27,13 @@ import z from "zod";
 import { BonusPredictionSchema } from "./bonus-prediction.schema";
 import { toast } from "sonner";
 import { GetBonusPredictionResponse } from "@/api/match/match.types";
+import { Button } from "@/components/ui/button";
 
-interface BonusPredictionForm {
+interface BonusPredictionFormProps {
   data?: GetBonusPredictionResponse;
 }
 
-export const BonusPredictionForm: FC<BonusPredictionForm> = ({ data }) => {
+export const BonusPredictionForm: FC<BonusPredictionFormProps> = ({ data }) => {
   const { id } = useParams<{ id: string }>();
 
   const [championInput, setChampionInput] = useState("");
@@ -34,6 +43,8 @@ export const BonusPredictionForm: FC<BonusPredictionForm> = ({ data }) => {
   const debouncedChampionInput = useDebounceValue(championInput, 600);
   const debouncedRunnerUpInput = useDebounceValue(runnerUpInput, 600);
   const debouncedTopScorerInput = useDebounceValue(topScorerInput, 600);
+
+  const isLocked = data?.tournamentStatus !== "UPCOMING";
 
   const form = useForm<z.infer<typeof BonusPredictionSchema>>({
     resolver: zodResolver(BonusPredictionSchema),
@@ -110,7 +121,7 @@ export const BonusPredictionForm: FC<BonusPredictionForm> = ({ data }) => {
     playersData?.data?.map((item) => ({
       id: item.id,
       name: item.name,
-      logo: item?.team.logo,
+      logo: item?.team?.logo,
     })) || [];
 
   const handleChampionInput = (selectedId: number | null) => {
@@ -150,8 +161,9 @@ export const BonusPredictionForm: FC<BonusPredictionForm> = ({ data }) => {
         ...values,
       },
       {
-        onSuccess: () => toast.success("Your predictions are saved!"),
-        onError: (e) => toast.error(`Something went wrong ${e.message}`),
+        onSuccess: () =>
+          toast.success("Your bonus predictions have been saved!"),
+        onError: (e) => toast.error(`Something went wrong: ${e.message}`),
       },
     );
 
@@ -160,207 +172,342 @@ export const BonusPredictionForm: FC<BonusPredictionForm> = ({ data }) => {
       onSubmit={form.handleSubmit(handleSubmit)}
       className="w-full space-y-6 text-white"
     >
-      <div className="p-6 bg-color-background rounded-md border border-brand-border space-y-6">
-        <div className="pb-3 border-b border-brand-border/50">
-          <h2 className="text-xl font-bold tracking-wide">
-            Make Your Bonus Predictions
-          </h2>
-          <p className="text-sm text-gray-400 mt-1">
-            Predict tournament outcomes to earn massive extra points.
-          </p>
+      <div className="p-4 md:p-6 bg-brand-container rounded-md border border-brand-border space-y-6 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-brand-border/80 gap-3">
+          <div className="space-y-2">
+            <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-semibold">
+              <Sparkles className="size-3.5" />
+              <span>Outright Predictions</span>
+            </div>
+            <h2 className="text-xl font-semibold tracking-tight text-white">
+              Bonus Tournament Predictions
+            </h2>
+            <p className="text-xs text-gray-400">
+              Pick the overall winner, runner-up, and top scorer before the
+              tournament begins to score bonus points.
+            </p>
+          </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="flex flex-col gap-y-6 p-4 rounded-md border border-brand-border/60 bg-[#1c2128]/40">
+
+        {isLocked && (
+          <div className="flex items-center gap-3 p-4 rounded-md bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs sm:text-sm">
+            <Lock className="size-5 shrink-0 text-amber-400" />
+            <span>
+              <strong>Predictions Locked:</strong> The tournament has officially
+              started. Bonus picks can no longer be edited.
+            </span>
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="flex flex-col gap-y-6 p-4 rounded-md border border-amber-500/60 bg-brand-card/60 relative overflow-hidden">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Crown className="size-4" />
-                <span className="font-semibold text-md text-gray-200">
-                  Champion
+              <div className="flex items-center gap-2.5 text-amber-400">
+                <div className="p-2 rounded-md bg-amber-500/15 border border-amber-500/60">
+                  <Crown className="size-4" />
+                </div>
+                <span className="font-semibold text-sm text-white">
+                  Tournament Champion
                 </span>
               </div>
-              <span className="text-xs text-gray-400">worth 15 pts</span>
+              <span className="px-2 py-1 rounded-md bg-amber-500/20 border border-amber-500/60 text-amber-400 text-xs font-semibold">
+                +15 pts
+              </span>
             </div>
-            <Combobox
-              value={championId ? Number(championId) : null}
-              onValueChange={handleChampionInput}
-              inputValue={championInput}
-              error={form.formState.errors.championTeamId?.message}
-              disabled={data?.tournamentStatus !== "UPCOMING"}
-              onInputValueChange={(val) => {
-                const matchedTeam = championTeams.find(
-                  (t) => t.id.toString() === val,
-                );
-                if (matchedTeam) {
-                  setChampionInput(matchedTeam.name);
-                } else {
-                  setChampionInput(val);
-                  form.setValue("championTeamId", undefined, {
-                    shouldValidate: true,
-                  });
-                }
-              }}
-            >
-              <ComboboxInput
-                placeholder="Search team..."
-                onBlur={() => {
-                  if (!championId) setChampionInput("");
+
+            {isLocked ? (
+              <div className="flex items-center justify-between p-3 rounded-md bg-[#161b22] border border-brand-border/40 min-h-11">
+                <span className="text-xs text-gray-400 font-medium">
+                  Your Pick
+                </span>
+                <div className="flex items-center gap-2">
+                  {data?.champion?.logo ? (
+                    <div className="relative size-5 shrink-0">
+                      <Image
+                        fill
+                        src={data.champion.logo}
+                        alt={data.champion.name}
+                        className="object-contain"
+                      />
+                    </div>
+                  ) : (
+                    <HelpCircle className="size-4 text-gray-500" />
+                  )}
+                  <span
+                    className={
+                      data?.champion?.name
+                        ? "text-sm text-white font-semibold"
+                        : "text-sm text-gray-400 font-medium"
+                    }
+                  >
+                    {data?.champion?.name ?? "No prediction submitted"}
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <Combobox
+                value={championId ? Number(championId) : null}
+                onValueChange={handleChampionInput}
+                inputValue={championInput}
+                error={form.formState.errors.championTeamId?.message}
+                disabled={isLocked}
+                onInputValueChange={(val) => {
+                  const matchedTeam = championTeams.find(
+                    (t) => t.id.toString() === val,
+                  );
+                  if (matchedTeam) {
+                    setChampionInput(matchedTeam.name);
+                  } else {
+                    setChampionInput(val);
+                    form.setValue("championTeamId", undefined, {
+                      shouldValidate: true,
+                    });
+                  }
                 }}
-              />
-              <ComboboxContent>
-                <ComboboxList>
-                  {championTeams.map((team) => (
-                    <ComboboxItem key={team.id} value={team.id}>
-                      <div className="relative size-5">
-                        <Image
-                          fill
-                          src={team.logo}
-                          alt={team.name}
-                          className="object-contain"
-                        />
-                      </div>
-                      <span>{team.name}</span>
-                    </ComboboxItem>
-                  ))}
-                </ComboboxList>
-              </ComboboxContent>
-            </Combobox>
+              >
+                <ComboboxInput
+                  placeholder="Search champion team..."
+                  onBlur={() => {
+                    if (!championId) setChampionInput("");
+                  }}
+                />
+                <ComboboxContent>
+                  <ComboboxList>
+                    {championTeams.map((team) => (
+                      <ComboboxItem key={team.id} value={team.id}>
+                        {team.logo && (
+                          <div className="relative size-5 shrink-0">
+                            <Image
+                              fill
+                              src={team.logo}
+                              alt={team.name}
+                              className="object-contain"
+                            />
+                          </div>
+                        )}
+                        <span>{team.name}</span>
+                      </ComboboxItem>
+                    ))}
+                  </ComboboxList>
+                </ComboboxContent>
+              </Combobox>
+            )}
           </div>
-          <div className="flex flex-col gap-y-6 p-4 rounded-md border border-brand-border/60 bg-[#1c2128]/40">
+
+          <div className="flex flex-col gap-y-6 p-4 rounded-md border border-sky-500/60 bg-brand-card/60 relative overflow-hidden">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Award className="size-4" />
-                <span className="font-semibold text-md text-gray-200">
-                  Runner-up
+              <div className="flex items-center gap-2.5 text-sky-400">
+                <div className="p-2 rounded-md bg-sky-500/15 border border-sky-500/60">
+                  <Award className="size-4" />
+                </div>
+                <span className="font-semibold text-sm text-white">
+                  Runner-Up
                 </span>
               </div>
-              <span className="text-xs text-gray-400">worth 10 pts</span>
+              <span className="px-2 py-1 rounded-md bg-sky-500/20 border border-sky-500/60 text-sky-400 text-xs font-semibold">
+                +10 pts
+              </span>
             </div>
-            <Combobox
-              value={runnerUpId ? Number(runnerUpId) : null}
-              onValueChange={handleRunnerUpInput}
-              inputValue={runnerUpInput}
-              error={form.formState.errors.runnerUpTeamId?.message}
-              disabled={data?.tournamentStatus !== "UPCOMING"}
-              onInputValueChange={(val) => {
-                const matchedTeam = runnerUpTeams.find(
-                  (t) => t.id.toString() === val,
-                );
-                if (matchedTeam) {
-                  setRunnerUpInput(matchedTeam.name);
-                } else {
-                  setRunnerUpInput(val);
-                  form.setValue("runnerUpTeamId", undefined, {
-                    shouldValidate: true,
-                  });
-                }
-              }}
-            >
-              <ComboboxInput
-                placeholder="Search team..."
-                onBlur={() => {
-                  if (!runnerUpId) setRunnerUpInput("");
+
+            {isLocked ? (
+              <div className="flex items-center justify-between p-3 rounded-md bg-[#161b22] border border-brand-border/40 min-h-11">
+                <span className="text-xs text-gray-400 font-medium">
+                  Your Pick
+                </span>
+                <div className="flex items-center gap-2">
+                  {data?.runnerUp?.logo ? (
+                    <div className="relative size-5 shrink-0">
+                      <Image
+                        fill
+                        src={data.runnerUp.logo}
+                        alt={data.runnerUp.name}
+                        className="object-contain"
+                      />
+                    </div>
+                  ) : (
+                    <HelpCircle className="size-4 text-gray-500" />
+                  )}
+                  <span
+                    className={
+                      data?.runnerUp?.name
+                        ? "text-sm text-white font-semibold"
+                        : "text-sm text-gray-400 font-medium"
+                    }
+                  >
+                    {data?.runnerUp?.name ?? "No prediction submitted"}
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <Combobox
+                value={runnerUpId ? Number(runnerUpId) : null}
+                onValueChange={handleRunnerUpInput}
+                inputValue={runnerUpInput}
+                error={form.formState.errors.runnerUpTeamId?.message}
+                disabled={isLocked}
+                onInputValueChange={(val) => {
+                  const matchedTeam = runnerUpTeams.find(
+                    (t) => t.id.toString() === val,
+                  );
+                  if (matchedTeam) {
+                    setRunnerUpInput(matchedTeam.name);
+                  } else {
+                    setRunnerUpInput(val);
+                    form.setValue("runnerUpTeamId", undefined, {
+                      shouldValidate: true,
+                    });
+                  }
                 }}
-              />
-              <ComboboxContent>
-                <ComboboxList>
-                  {runnerUpTeams.map((team) => (
-                    <ComboboxItem key={team.id} value={team.id}>
-                      <div className="relative size-5">
-                        <Image
-                          fill
-                          src={team.logo}
-                          alt={team.name}
-                          className="object-contain"
-                        />
-                      </div>
-                      <span>{team.name}</span>
-                    </ComboboxItem>
-                  ))}
-                </ComboboxList>
-              </ComboboxContent>
-            </Combobox>
+              >
+                <ComboboxInput
+                  placeholder="Search runner-up team..."
+                  onBlur={() => {
+                    if (!runnerUpId) setRunnerUpInput("");
+                  }}
+                />
+                <ComboboxContent>
+                  <ComboboxList>
+                    {runnerUpTeams.map((team) => (
+                      <ComboboxItem key={team.id} value={team.id}>
+                        {team.logo && (
+                          <div className="relative size-5 shrink-0">
+                            <Image
+                              fill
+                              src={team.logo}
+                              alt={team.name}
+                              className="object-contain"
+                            />
+                          </div>
+                        )}
+                        <span>{team.name}</span>
+                      </ComboboxItem>
+                    ))}
+                  </ComboboxList>
+                </ComboboxContent>
+              </Combobox>
+            )}
           </div>
-          <div className="flex flex-col gap-y-6 p-4 rounded-md border border-brand-border/60 bg-[#1c2128]/40">
+
+          <div className="flex flex-col gap-y-6 p-4 rounded-md border border-emerald-500/60 bg-brand-card/60 relative overflow-hidden">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Star className="size-4" />
-                <span className="font-semibold text-md text-gray-200">
+              <div className="flex items-center gap-2.5 text-emerald-400">
+                <div className="p-2 rounded-md bg-emerald-500/15 border border-emerald-500/60">
+                  <Star className="size-4" />
+                </div>
+                <span className="font-semibold text-sm text-white">
                   Top Scorer
                 </span>
               </div>
-              <span className="text-xs text-gray-400">worth 10 pts</span>
+              <span className="px-2 py-1 rounded-md bg-emerald-500/20 border border-emerald-500/60 text-emerald-400 text-xs font-semibold">
+                +10 pts
+              </span>
             </div>
-            <Combobox
-              value={topScorerId ? Number(topScorerId) : null}
-              onValueChange={handleTopScorerInput}
-              inputValue={topScorerInput}
-              disabled={data?.tournamentStatus !== "UPCOMING"}
-              error={form.formState.errors.topScorerId?.message}
-              onInputValueChange={(val) => {
-                const matchedPlayer = players.find(
-                  (t) => t.id.toString() === val,
-                );
-                if (matchedPlayer) {
-                  setTopScorerInput(matchedPlayer.name);
-                } else {
-                  setTopScorerInput(val);
-                  form.setValue("topScorerId", undefined, {
-                    shouldValidate: true,
-                  });
-                }
-              }}
-            >
-              <ComboboxInput
-                placeholder="Search player..."
-                onBlur={() => {
-                  if (!topScorerId) setTopScorerInput("");
+
+            {isLocked ? (
+              <div className="flex items-center justify-between p-3 rounded-md bg-[#161b22] border border-brand-border/40 min-h-11">
+                <span className="text-xs text-gray-400 font-medium">
+                  Your Pick
+                </span>
+                <div className="flex items-center gap-2">
+                  {data?.topScorer?.teamLogo ? (
+                    <div className="relative size-5 shrink-0">
+                      <Image
+                        fill
+                        src={data.topScorer.teamLogo}
+                        alt={data.topScorer.name}
+                        className="object-contain"
+                      />
+                    </div>
+                  ) : (
+                    <HelpCircle className="size-4 text-gray-500" />
+                  )}
+                  <span
+                    className={
+                      data?.topScorer?.name
+                        ? "text-sm text-white font-semibold"
+                        : "text-sm text-gray-400 font-medium"
+                    }
+                  >
+                    {data?.topScorer?.name ?? "No prediction submitted"}
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <Combobox
+                value={topScorerId ? Number(topScorerId) : null}
+                onValueChange={handleTopScorerInput}
+                inputValue={topScorerInput}
+                disabled={isLocked}
+                error={form.formState.errors.topScorerId?.message}
+                onInputValueChange={(val) => {
+                  const matchedPlayer = players.find(
+                    (t) => t.id.toString() === val,
+                  );
+                  if (matchedPlayer) {
+                    setTopScorerInput(matchedPlayer.name);
+                  } else {
+                    setTopScorerInput(val);
+                    form.setValue("topScorerId", undefined, {
+                      shouldValidate: true,
+                    });
+                  }
                 }}
-              />
-              <ComboboxContent>
-                <ComboboxList>
-                  {players.map((team) => (
-                    <ComboboxItem key={team.id} value={team.id}>
-                      <div className="relative size-5">
-                        <Image
-                          fill
-                          src={team.logo}
-                          alt={team.name}
-                          className="object-contain"
-                        />
-                      </div>
-                      <span>{team.name}</span>
-                    </ComboboxItem>
-                  ))}
-                </ComboboxList>
-              </ComboboxContent>
-            </Combobox>
+              >
+                <ComboboxInput
+                  placeholder="Search top scorer player..."
+                  onBlur={() => {
+                    if (!topScorerId) setTopScorerInput("");
+                  }}
+                />
+                <ComboboxContent>
+                  <ComboboxList>
+                    {players.map((player) => (
+                      <ComboboxItem key={player.id} value={player.id}>
+                        {player.logo && (
+                          <div className="relative size-5 shrink-0">
+                            <Image
+                              fill
+                              src={player.logo}
+                              alt={player.name}
+                              className="object-contain"
+                            />
+                          </div>
+                        )}
+                        <span>{player.name}</span>
+                      </ComboboxItem>
+                    ))}
+                  </ComboboxList>
+                </ComboboxContent>
+              </Combobox>
+            )}
           </div>
         </div>
-        {data?.tournamentStatus === "UPCOMING" ? (
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between pt-4 border-t border-brand-border/50 gap-4">
-            <button
+
+        {!isLocked && (
+          <div className="flex items-center justify-between pt-6 border-t border-brand-border/60">
+            <span className="text-xs text-gray-400 hidden sm:inline-block">
+              Make sure to save your predictions before the tournament kickoff.
+            </span>
+            <Button
               type="submit"
-              disabled={isPending}
-              className={cn(
-                "flex items-center justify-center gap-2 px-5 py-2.5 rounded text-sm font-bold tracking-wide transition-colors",
-                "bg-emerald-600 hover:bg-emerald-500 text-white cursor-pointer",
-                "disabled:bg-emerald-800 disabled:text-gray-400 disabled:cursor-not-allowed",
-              )}
+              variant="primary"
+              disabled={isPending || !form.formState.isDirty}
+              className="w-full sm:w-auto"
             >
               {isPending ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  Saving...
+                  <Loader className="size-4 animate-spin" />
+                  <span>Saving...</span>
                 </>
               ) : (
                 <>
-                  <Save className="w-4 h-4" />
-                  Save Predictions
+                  <Save className="size-4" />
+                  <span>Save Predictions</span>
                 </>
               )}
-            </button>
+            </Button>
           </div>
-        ) : null}
+        )}
       </div>
     </form>
   );

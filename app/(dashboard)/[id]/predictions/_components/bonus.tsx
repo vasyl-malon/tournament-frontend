@@ -1,57 +1,38 @@
-"use client";
-
+import { BONUS_PREDICTION_LABELS, BonusPredictionType, cn } from "@/lib/utils";
 import { Crown, Award, Star } from "lucide-react";
 import Image from "next/image";
 
+interface Prediction {
+  id: number;
+  logo?: string;
+  name: string;
+  pointsEarned: number | null;
+}
+
 interface BonusPredictionsProps {
   predictions?: {
-    champion: {
-      id: number;
-      logo: string;
-      name: string;
-      pointsEarned: number | null;
-    };
-    runnerUp: {
-      id: number;
-      logo: string;
-      name: string;
-      pointsEarned: number | null;
-    };
-    topScorer: {
-      id: number;
-      name: string;
-      pointsEarned: number | null;
-      teamLogo: string;
-    };
+    champion?: Prediction;
+    runnerUp?: Prediction;
+    topScorer?: Prediction;
   };
 }
 
+const iconMap = {
+  [BonusPredictionType.CHAMPION]: Crown,
+  [BonusPredictionType.RUNNER_UP]: Award,
+  [BonusPredictionType.TOP_SCORER]: Star,
+};
+
+const iconColors = {
+  [BonusPredictionType.CHAMPION]: "text-orange-500",
+  [BonusPredictionType.RUNNER_UP]: "text-purple-500",
+  [BonusPredictionType.TOP_SCORER]: "text-yellow-500",
+};
+
 export function BonusPredictions({ predictions }: BonusPredictionsProps) {
-  // 1. Чітко типізуємо мапу іконок
-  const iconMap = {
-    CHAMPION: Crown,
-    RUNNER_UP: Award,
-    TOP_SCORER: Star,
-  };
-
-  // 2. Додаємо кольори для кожної номінації, щоб оживити інтерфейс
-  const iconColors = {
-    CHAMPION: "text-orange-500",
-    RUNNER_UP: "text-purple-500",
-    TOP_SCORER: "text-yellow-500",
-  };
-
-  // 3. Явно типізуємо об'єкти в масиві, щоб прибрати помилку ts(7053)
-  const predictionsArray: {
-    type: keyof typeof iconMap;
-    title: string | undefined;
-    value: number | undefined;
-    logo: string | undefined;
-    points: number | null | undefined;
-    pointsWorth: number;
-  }[] = [
+  const predictionsArray = [
     {
-      type: "CHAMPION",
+      type: BonusPredictionType.CHAMPION,
       title: predictions?.champion?.name,
       value: predictions?.champion?.id,
       logo: predictions?.champion?.logo,
@@ -59,7 +40,7 @@ export function BonusPredictions({ predictions }: BonusPredictionsProps) {
       pointsWorth: 15,
     },
     {
-      type: "RUNNER_UP",
+      type: BonusPredictionType.RUNNER_UP,
       title: predictions?.runnerUp?.name,
       value: predictions?.runnerUp?.id,
       logo: predictions?.runnerUp?.logo,
@@ -67,10 +48,10 @@ export function BonusPredictions({ predictions }: BonusPredictionsProps) {
       pointsWorth: 10,
     },
     {
-      type: "TOP_SCORER",
+      type: BonusPredictionType.TOP_SCORER,
       title: predictions?.topScorer?.name,
       value: predictions?.topScorer?.id,
-      logo: predictions?.topScorer?.teamLogo,
+      logo: predictions?.topScorer?.logo,
       points: predictions?.topScorer?.pointsEarned,
       pointsWorth: 10,
     },
@@ -79,16 +60,15 @@ export function BonusPredictions({ predictions }: BonusPredictionsProps) {
   return (
     <div className="flex flex-col gap-y-6 p-6 bg-brand-container rounded-md border border-brand-border text-white w-full">
       <div className="flex pb-3 border-b border-brand-border/50">
-        <h2 className="text-xl font-bold tracking-wide">Your Bonus Predictions</h2>
+        <h2 className="text-lg font-bold tracking-wide">
+          Your Bonus Predictions
+        </h2>
       </div>
-
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {predictionsArray.map((pred, index) => {
-          const Icon = iconMap[pred.type];
-          const iconColor = iconColors[pred.type];
+          const Icon = iconMap[pred.type as keyof typeof iconMap];
+          const iconColor = iconColors[pred.type as keyof typeof iconMap];
 
-          // Логіка визначення статусу на основі балів з бекенду:
-          // Якщо прогнозу немає взагалі — залишаємо порожнім або null
           const hasPredicted = pred.title !== undefined;
           const isPending = hasPredicted && pred.points === null;
           const isCorrect = hasPredicted && pred.points && pred.points > 0;
@@ -97,14 +77,13 @@ export function BonusPredictions({ predictions }: BonusPredictionsProps) {
           return (
             <div
               key={index}
-              className="flex flex-col justify-between p-4 rounded-md border border-brand-border/60 bg-[#1c2128]/40 min-h-[120px] transition-all duration-200 hover:border-brand-border"
+              className="flex flex-col justify-between p-4 rounded-md border border-brand-border/60 bg-brand-card/40 min-h-30 transition-all duration-200 hover:border-brand-border"
             >
-              {/* Верхня плашка: Іконка + Назва номінації */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Icon className={`w-4 h-4 stroke-[2] ${iconColor}`} />
+                  <Icon className={cn("size-4 stroke-[2]", iconColor)} />
                   <span className="font-semibold text-sm text-gray-300">
-                    {pred.type.replace("_", "-").toLowerCase().replace(/^\w/, (c) => c.toUpperCase())}
+                    {BONUS_PREDICTION_LABELS[pred.type]}
                   </span>
                 </div>
                 <span className="text-xs text-gray-400 font-medium">
@@ -112,8 +91,7 @@ export function BonusPredictions({ predictions }: BonusPredictionsProps) {
                 </span>
               </div>
 
-              {/* Нижня плашка: Логотип + Значення + Статус очок */}
-              <div className="flex items-end justify-between mt-5">
+              <div className="flex items-end justify-between mt-2">
                 <div className="flex items-center gap-2.5 max-w-[70%]">
                   {pred.logo ? (
                     <div className="relative size-5 shrink-0 rounded-sm overflow-hidden">
@@ -125,30 +103,32 @@ export function BonusPredictions({ predictions }: BonusPredictionsProps) {
                       />
                     </div>
                   ) : (
-                    // Плейсхолдер, якщо користувач ще не зробив вибір
                     !hasPredicted && (
                       <div className="size-5 border border-dashed border-brand-border rounded-full shrink-0" />
                     )
                   )}
-                  <span className={`text-sm font-medium tracking-wide truncate ${hasPredicted ? "text-white" : "text-gray-500 italic"}`}>
+                  <span
+                    className={cn(
+                      "text-sm font-medium tracking-wide truncate",
+                      hasPredicted ? "text-white" : "text-gray-500",
+                    )}
+                  >
                     {pred.title || "Not predicted yet"}
                   </span>
                 </div>
-
-                {/* Відображення балів/статусу */}
-                <div className="text-xs font-bold tracking-wide pb-0.5">
+                <div className="text-xs font-medium tracking-wide pb-0.5">
                   {isPending && (
-                    <span className="text-gray-400 bg-[#30363d]/50 px-2 py-0.5 rounded text-[11px] border border-brand-border/30">
+                    <span className="text-gray-400 bg-brand-border-muted/20 px-2 py-1 rounded text-xs border border-brand-border/60">
                       Pending
                     </span>
                   )}
                   {isCorrect && (
-                    <span className="text-emerald-400 bg-emerald-950/30 px-2 py-0.5 rounded text-[11px] border border-emerald-500/20">
-                      +{pred.points} pts
+                    <span className="bg-emerald-500/20 text-emerald-400 px-2 py-1 rounded text-xs border border-emerald-500/60">
+                      +{12} pts
                     </span>
                   )}
                   {isIncorrect && (
-                    <span className="text-rose-400 bg-rose-950/30 px-2 py-0.5 rounded text-[11px] border border-rose-500/20">
+                    <span className="bg-red-500/20 text-red-400 px-2 py-1 rounded text-xs border border-red-500/60">
                       0 pts
                     </span>
                   )}

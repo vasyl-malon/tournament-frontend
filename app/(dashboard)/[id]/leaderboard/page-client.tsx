@@ -53,7 +53,7 @@ export const LeaderboardTable = () => {
                 <TabsTrigger
                   key={tab.value}
                   value={tab.value}
-                  className="w-full data-[state=active]:bg-brand-border data-[state=active]:text-white text-[#9198a1] uppercase text-xs px-3 py-1.5"
+                  className="w-full text-gray-400 uppercase text-xs px-3 py-1.5"
                 >
                   <Icon className="size-3.5" />
                   <span>{tab.title}</span>

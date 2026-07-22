@@ -6,8 +6,9 @@ import { UserStatsCards } from "./_components/user-stats-cards";
 import { BonusPredictions } from "./_components/bonus";
 import { RankCard } from "./_components/rank";
 import { useAuthStore } from "@/store/auth.store";
-import { MatchPredictions } from "./_components/match-predictions";
+import { MatchPredictions } from "./_components/predictions";
 import { useSearchParams } from "next/navigation";
+import { PredictionsSkeletonLoading } from "./_components/skeleton-loading";
 
 export const Predictions = () => {
   const { id } = useParams<{ id: string }>();
@@ -24,7 +25,7 @@ export const Predictions = () => {
     { enabled: !!(user?.id && id) },
   );
 
-  if (isLoading) return <div>Loading</div>;
+  if (isLoading) return <PredictionsSkeletonLoading />;
 
   const username = `${data?.data.stats.firstName} ${data?.data.stats.lastName}`;
 
@@ -32,7 +33,18 @@ export const Predictions = () => {
     <div className="flex flex-col gap-y-10">
       <RankCard username={username} rank={data?.data.stats.rank} />
       <UserStatsCards statistic={data?.data.stats} />
-      <BonusPredictions predictions={data?.data.bonusPrediction} />
+      <BonusPredictions
+        predictions={{
+          champion: data?.data?.bonusPrediction?.champion,
+          runnerUp: data?.data?.bonusPrediction?.runnerUp,
+          topScorer: data?.data?.bonusPrediction?.topScorer
+            ? {
+                ...data?.data.bonusPrediction.topScorer,
+                logo: data?.data.bonusPrediction.topScorer.teamLogo,
+              }
+            : undefined,
+        }}
+      />
       <MatchPredictions bets={data?.data.bets || []} />
     </div>
   );

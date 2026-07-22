@@ -8,43 +8,21 @@ export enum MatchStage {
   FINAL = "FINAL",
   THIRD_PLACE = "THIRD_PLACE",
   SEMI_FINALS = "SEMI_FINALS",
-  QUARTER_FINALS = "QUARTER_FINALS",
-  ROUND_OF_16 = "ROUND_OF_16",
-  ROUND_OF_32 = "ROUND_OF_32",
-  ROUND_OF_64 = "ROUND_OF_64",
-  ROUND_OF_128 = "ROUND_OF_128",
-
-  LEAGUE_PHASE = "LEAGUE_PHASE",
+  QUARTER_FINALS = "QUARTER_FINALS",  
+  LAST_16 = "LAST_16",
+  LAST_32 = "LAST_32",
+  LAST_64 = "LAST_64",
+  LEAGUE_STAGE = "LEAGUE_STAGE",
   GROUP_STAGE = "GROUP_STAGE",
-  KNOCKOUT_STAGE_PLAY_OFFS = "KNOCKOUT_STAGE_PLAY_OFFS",
-
+  KNOCKOUT_ROUND_PLAY_OFFS = "KNOCKOUT_ROUND_PLAY_OFFS",
   REGULAR_SEASON = "REGULAR_SEASON",
   PLAYOFFS = "PLAYOFFS",
-
-  QUALIFYING_ROUND = "QUALIFYING_ROUND",
   PRELIMINARY_ROUND = "PRELIMINARY_ROUND",
+  QUALIFICATION_ROUND_1 = "QUALIFICATION_ROUND_1",
+  QUALIFICATION_ROUND_2 = "QUALIFICATION_ROUND_2",
+  QUALIFICATION_ROUND_3 = "QUALIFICATION_ROUND_3",
+  PLAYOFF_ROUND = "PLAYOFF_ROUND",
 }
-
-export const MATCH_STAGE_LABELS: Record<MatchStage, string> = {
-  [MatchStage.FINAL]: "Final",
-  [MatchStage.THIRD_PLACE]: "Third Place Match",
-  [MatchStage.SEMI_FINALS]: "Semi-finals",
-  [MatchStage.QUARTER_FINALS]: "Quarter-finals",
-  [MatchStage.ROUND_OF_16]: "Round of 16",
-  [MatchStage.ROUND_OF_32]: "Round of 32",
-  [MatchStage.ROUND_OF_64]: "Round of 64",
-  [MatchStage.ROUND_OF_128]: "Round of 128",
-
-  [MatchStage.LEAGUE_PHASE]: "League Phase",
-  [MatchStage.GROUP_STAGE]: "Group Stage",
-  [MatchStage.KNOCKOUT_STAGE_PLAY_OFFS]: "Knockout Play-offs",
-
-  [MatchStage.REGULAR_SEASON]: "Regular Season",
-  [MatchStage.PLAYOFFS]: "Play-offs",
-
-  [MatchStage.QUALIFYING_ROUND]: "Qualifying Round",
-  [MatchStage.PRELIMINARY_ROUND]: "Preliminary Round",
-};
 
 export type Bet = {
   id: string;

@@ -1,4 +1,4 @@
-import { Trophy, Award, Target, CheckCircle2, Scale } from "lucide-react";
+import { Trophy, Award, Target, CheckCircle2, GitCompare } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { Statistic } from "@/api/match/match.types";
@@ -30,7 +30,7 @@ export function UserStatsCards({ statistic }: UserStatsProps) {
     {
       title: "Correct Difference",
       value: statistic?.differenceCount,
-      icon: Scale,
+      icon: GitCompare,
       iconColor: "text-teal-500",
     },
     {

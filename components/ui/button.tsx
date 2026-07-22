@@ -4,41 +4,40 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  // Базові стилі GitHub: трохи менше заокруглення (rounded-md), шрифт medium,
-  // специфічний синій ринг при фокусі та тонкий border.
-  "group/button inline-flex shrink-0 items-center justify-center rounded-md text-sm font-medium transition-colors outline-none select-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 gap-2",
+  "group/button inline-flex shrink-0 items-center justify-center rounded-md text-sm font-semibold transition-all duration-200 outline-none select-none focus-visible:ring-2 focus-visible:ring-emerald-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0d1117] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 gap-2 cursor-pointer active:scale-[0.98]",
   {
     variants: {
       variant: {
-        // Стандартна кнопка GitHub (сірий фон, тонка рамка)
+        // Стандартна темна кнопка під стиль бренд-карток
         default:
-          "border border-slate-300 bg-slate-50 text-slate-700 shadow-sm hover:bg-slate-100 hover:border-slate-400 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:border-slate-600",
+          "border border-brand-border bg-brand-card text-white shadow-sm hover:bg-brand-item-hover hover:border-brand-border-muted",
 
-        // Головна дія (GitHub's iconic Green Button)
+        // Головна дія (Emerald Primary)
         primary:
-          "border border-emerald-600/20 bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-500",
+          "border border-emerald-500/30 bg-emerald-600 text-white shadow-md shadow-emerald-950/20 hover:bg-emerald-500 active:bg-emerald-700",
 
-        // Outline (просто рамка, без фону)
+        // Вторинна/Прозора рамка
         outline:
-          "border border-slate-300 bg-transparent text-slate-700 shadow-sm hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800",
+          "border border-brand-border bg-transparent text-gray-200 hover:bg-brand-card hover:text-white hover:border-brand-border-muted",
 
-        // Невидима кнопка (Ghost)
+        // Прихована кнопка (Ghost)
         ghost:
-          "border border-transparent bg-transparent text-slate-600 shadow-none hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800",
+          "border border-transparent bg-transparent text-gray-300 hover:bg-brand-card hover:text-white",
 
-        // Destructive (у GitHub це сіра кнопка з червоним текстом, яка стає повністю червоною при наведенні)
+        // Небезпечна дія (Destructive)
         destructive:
-          "border border-slate-300 bg-slate-50 text-red-600 shadow-sm hover:border-red-600 hover:bg-red-600 hover:text-white dark:border-slate-700 dark:bg-slate-800 dark:text-red-500 dark:hover:bg-red-700 dark:hover:border-red-700 dark:hover:text-white",
+          "border border-red-500/30 bg-red-500/15 text-red-400 shadow-sm hover:bg-red-600 hover:text-white hover:border-red-500",
 
-        // Текстове посилання
-        link: "border-transparent bg-transparent text-blue-600 shadow-none hover:underline underline-offset-4 dark:text-blue-400",
+        // Посилання
+        link: "border-transparent bg-transparent text-emerald-400 shadow-none hover:underline underline-offset-4 p-0 h-auto font-normal active:scale-100",
       },
       size: {
-        // Розміри GitHub зазвичай досить компактні
-        default: "h-8 px-3 py-1.5 [&_svg:not([class*='size-'])]:size-4",
-        sm: "h-7 px-2.5 text-xs [&_svg:not([class*='size-'])]:size-3.5",
-        lg: "h-10 px-4 text-base [&_svg:not([class*='size-'])]:size-5",
-        icon: "size-8 flex justify-center [&_svg:not([class*='size-'])]:size-4",
+        default: "h-10 px-4 py-2 [&_svg:not([class*='size-'])]:size-4",
+        sm: "h-8 px-3 text-xs rounded-md [&_svg:not([class*='size-'])]:size-3.5",
+        lg: "h-12 px-6 text-base rounded-md [&_svg:not([class*='size-'])]:size-5",
+        icon: "size-10 rounded-md flex items-center justify-center [&_svg:not([class*='size-'])]:size-4",
+        "icon-sm":
+          "size-8 rounded-md flex items-center justify-center [&_svg:not([class*='size-'])]:size-3.5",
       },
     },
     defaultVariants: {
@@ -57,7 +56,7 @@ function Button({
   return (
     <ButtonPrimitive
       data-slot="button"
-      className={cn('cursor-pointer', buttonVariants({ variant, size, className }))}
+      className={cn(buttonVariants({ variant, size, className }))}
       {...props}
     />
   );

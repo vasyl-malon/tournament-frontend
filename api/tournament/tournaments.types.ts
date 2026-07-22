@@ -5,6 +5,7 @@ export type GetMyTournamentsResponse = {
     id: string;
     name: string;
     status: string;
+    emblem: string | null;
   }[];
 };
 

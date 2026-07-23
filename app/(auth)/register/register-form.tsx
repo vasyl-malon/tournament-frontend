@@ -38,7 +38,7 @@ export const RegisterForm = () => {
       const activeTournamentId = tournamentId || data.lastTournamentId;
       setTournamentId(activeTournamentId || "");
 
-      router.push("/");
+      router.push("/dashboard");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);

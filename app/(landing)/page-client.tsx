@@ -21,7 +21,7 @@ export function HomePage() {
     : "/dashboard";
 
   return (
-    <div className="flex flex-col gap-y-12 md:gap-y-20 overflow-hidden px-4 md:px-8 pt-26 md:pt-32 pb-12 md:pb-20">
+    <div className="flex flex-col gap-y-12 md:gap-y-20 overflow-hidden">
       <section className="relative flex flex-col items-center text-center max-w-5xl mx-auto w-full">
         <div className="absolute -top-20 left-1/2 -translate-x-1/2 size-96 bg-emerald-500/15 rounded-full blur-[120px] pointer-events-none" />
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold mb-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
@@ -54,7 +54,7 @@ export function HomePage() {
         </Button>
       </section>
 
-      <section className="max-w-7xl mx-auto w-full">
+      <section className="max-w-6xl mx-auto w-full">
         <div className="text-center mb-12 space-y-2">
           <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
             Designed for Passionate Football Fans
@@ -112,7 +112,7 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className="max-w-7xl mx-auto w-full">
+      <section className="max-w-6xl mx-auto w-full">
         <div className="bg-brand-container border border-brand-border rounded-lg p-8 sm:p-12 relative overflow-hidden">
           <div className="max-w-xl mb-10 space-y-2">
             <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">
@@ -174,7 +174,7 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className="max-w-7xl mx-auto w-full text-center space-y-8">
+      <section className="max-w-6xl mx-auto w-full text-center space-y-8">
         <div className="space-y-2">
           <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
             Fair & Exciting Scoring Rules

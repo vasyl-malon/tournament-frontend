@@ -11,7 +11,7 @@ import {
 
 export const PrivacyPage: FC = () => {
   return (
-    <div className="max-w-5xl mx-auto px-2 py-4 md:py-8 space-y-8 text-gray-200">
+    <div className="max-w-6xl mx-auto space-y-8 text-gray-200">
       <div className="space-y-3 border-b border-brand-border/40 pb-6">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
           <ShieldCheck className="size-3.5" />

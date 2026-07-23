@@ -46,7 +46,7 @@ export const LoginForm = () => {
       const activeTournamentId = tournamentId || data.lastTournamentId;
       setTournamentId(activeTournamentId || "");
 
-      router.push(callbackUrl || "/");
+      router.push(callbackUrl || "/dashboard");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);

@@ -7,8 +7,7 @@ export default function RootLayout({
 }>) {
   return (
     <div className="flex flex-col min-h-screen w-full">
-      {/* <div>Header</div> */}
-      <main className="flex  justify-center w-full mx-auto text-white px-4 pt-22 md:px-8 md:pt-26 pb-8">
+      <main className="flex justify-center items-center w-full mx-auto text-white py-2">
         {children}
       </main>
       <Footer />

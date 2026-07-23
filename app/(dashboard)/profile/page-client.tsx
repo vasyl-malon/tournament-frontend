@@ -4,7 +4,7 @@ import { FC } from "react";
 import { Trophy, Calendar, ChevronRight, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useAuthStore } from "@/store/auth.store";
+import { useAuthStore } from "@/lib/auth.store";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useGetMyTournaments } from "@/lib/api";

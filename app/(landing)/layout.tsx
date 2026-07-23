@@ -8,7 +8,7 @@ export default function RootLayout({
   return (
     <div className="flex flex-col">
       <LandingHeader />
-      <div className="flex items-center justify-center flex-grow flex-1 w-full mx-auto max-w-[87.5rem] px-4 pt-22 md:px-8 md:pt-26 pb-8 min-h-[calc(100vh_-_8rem)]">
+      <div className="flex items-center justify-center flex-grow flex-1 w-full">
         {children}
       </div>
     </div>

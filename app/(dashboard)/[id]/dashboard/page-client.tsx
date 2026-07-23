@@ -3,7 +3,7 @@
 import { MatchCard } from "@/app/components/match-card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useAuthStore } from "@/store/auth.store";
+import { useAuthStore } from "@/lib/auth.store";
 import {
   Clock,
   Trophy,

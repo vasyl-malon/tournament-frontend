@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Header from "@/app/components/header";
-import Footer from "../components/footer";
 import "../globals.css";
 import { getAuthServerSession } from "@/lib/auth-server";
 import { redirect } from "next/navigation";
@@ -22,12 +21,11 @@ export default async function RootLayout({
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col">
       <Header />
-      <main className="flex-grow flex-1 w-full max-w-[87.5rem] mx-auto text-white px-4 pt-22 md:px-8 md:pt-26 pb-8">
+      <div className="flex-grow flex-1 w-full max-w-[87.5rem] mx-auto text-white px-4 pt-22 md:px-8 md:pt-26 pb-8">
         {children}
-      </main>
-      <Footer />
+      </div>
     </div>
   );
 }

@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import { UserStatsCards } from "./_components/user-stats-cards";
 import { BonusPredictions } from "./_components/bonus";
 import { RankCard } from "./_components/rank";
-import { useAuthStore } from "@/store/auth.store";
+import { useAuthStore } from "@/lib/auth.store";
 import { MatchPredictions } from "./_components/predictions";
 import { useSearchParams } from "next/navigation";
 import { PredictionsSkeletonLoading } from "./_components/skeleton-loading";

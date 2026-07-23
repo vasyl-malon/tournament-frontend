@@ -17,7 +17,7 @@ import {
   X,
   BookOpen,
 } from "lucide-react";
-import { useAuthStore } from "@/store/auth.store";
+import { useAuthStore } from "@/lib/auth.store";
 import {
   Select,
   SelectContent,
@@ -101,7 +101,7 @@ export default function Header() {
     <header className="fixed top-0 left-0 right-0 h-16 w-full bg-brand-page/85 backdrop-blur-md text-white border-b border-brand-border/60 z-50 transition-all">
       <div className="flex max-w-[87.5rem] mx-auto px-4 md:px-8 w-full h-full items-center justify-between gap-x-4 grow">
         <Link
-          href={activeTournamentId ? `/${activeTournamentId}/dashboard` : "/"}
+          href={activeTournamentId ? `/${activeTournamentId}/dashboard` : "/dashboard"}
         >
           <div>
             <Image

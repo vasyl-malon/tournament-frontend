@@ -18,7 +18,7 @@ import { useForm } from "react-hook-form";
 import { RegisterSchema } from "./register.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
-import { useAuthStore } from "@/store/auth.store";
+import { useAuthStore } from "@/lib/auth.store";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 

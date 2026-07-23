@@ -8,7 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { MobileCard } from "./mobile-card";
 import { TableView } from "./table-view";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useAuthStore } from "@/store/auth.store";
+import { useAuthStore } from "@/lib/auth.store";
 import { Statistic } from "@/lib/api/common.types";
 
 export const LeaderboardTable = () => {

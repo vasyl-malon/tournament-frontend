@@ -14,8 +14,7 @@ import {
 
 export const RulesPage: FC = () => {
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-10 text-gray-200">
-      {/* 1. Header */}
+    <div className="max-w-6xl mx-auto px-4 py-8 space-y-10 text-gray-200">
       <div className="space-y-3 text-center sm:text-left border-b border-brand-border/40 pb-6">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
           <Sparkles className="size-3.5" />
@@ -30,7 +29,6 @@ export const RulesPage: FC = () => {
         </p>
       </div>
 
-      {/* 2. Match Score Points */}
       <section className="space-y-4">
         <div className="flex items-center gap-2.5">
           <Target className="size-5 text-emerald-400" />
@@ -46,7 +44,6 @@ export const RulesPage: FC = () => {
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-          {/* Exact Score (+3) */}
           <div className="bg-brand-container p-4 sm:p-5 rounded-xl border border-emerald-500/30 border-l-4 border-l-emerald-500 flex flex-col justify-between gap-4">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
@@ -61,7 +58,7 @@ export const RulesPage: FC = () => {
                 You guessed the exact final score of the match.
               </p>
             </div>
-            <div className="bg-[#0d1117] p-2.5 rounded-lg border border-brand-border/40 text-xs font-mono space-y-1">
+            <div className="bg-brand-page p-2.5 rounded-lg border border-brand-border/40 text-xs font-mono space-y-1">
               <div className="flex justify-between text-gray-400">
                 <span>Actual Result:</span>
                 <span className="text-white font-bold">2 : 1</span>
@@ -73,7 +70,6 @@ export const RulesPage: FC = () => {
             </div>
           </div>
 
-          {/* Correct Goal Difference (+2) */}
           <div className="bg-brand-container p-4 sm:p-5 rounded-xl border border-sky-500/30 border-l-4 border-l-sky-500 flex flex-col justify-between gap-4">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
@@ -89,7 +85,7 @@ export const RulesPage: FC = () => {
                 score.
               </p>
             </div>
-            <div className="bg-[#0d1117] p-2.5 rounded-lg border border-brand-border/40 text-xs font-mono space-y-1">
+            <div className="bg-brand-page p-2.5 rounded-lg border border-brand-border/40 text-xs font-mono space-y-1">
               <div className="flex justify-between text-gray-400">
                 <span>Actual Result:</span>
                 <span className="text-white font-bold">3 : 1 (+2)</span>
@@ -101,7 +97,6 @@ export const RulesPage: FC = () => {
             </div>
           </div>
 
-          {/* Correct Outcome (+1) */}
           <div className="bg-brand-container p-4 sm:p-5 rounded-xl border border-amber-500/30 border-l-4 border-l-amber-500 flex flex-col justify-between gap-4">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
@@ -117,7 +112,7 @@ export const RulesPage: FC = () => {
                 not goal difference.
               </p>
             </div>
-            <div className="bg-[#0d1117] p-2.5 rounded-lg border border-brand-border/40 text-xs font-mono space-y-1">
+            <div className="bg-brand-page p-2.5 rounded-lg border border-brand-border/40 text-xs font-mono space-y-1">
               <div className="flex justify-between text-gray-400">
                 <span>Actual Result:</span>
                 <span className="text-white font-bold">3 : 1 (Home)</span>
@@ -129,7 +124,6 @@ export const RulesPage: FC = () => {
             </div>
           </div>
 
-          {/* Wrong Outcome (0) */}
           <div className="bg-brand-container p-4 sm:p-5 rounded-xl border border-red-500/30 border-l-4 border-l-red-500 flex flex-col justify-between gap-4">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
@@ -144,7 +138,7 @@ export const RulesPage: FC = () => {
                 Missed both the winner and the score.
               </p>
             </div>
-            <div className="bg-[#0d1117] p-2.5 rounded-lg border border-brand-border/40 text-xs font-mono space-y-1">
+            <div className="bg-brand-page p-2.5 rounded-lg border border-brand-border/40 text-xs font-mono space-y-1">
               <div className="flex justify-between text-gray-400">
                 <span>Actual Result:</span>
                 <span className="text-white font-bold">1 : 2 (Away)</span>
@@ -157,7 +151,6 @@ export const RulesPage: FC = () => {
           </div>
         </div>
 
-        {/* 120 Minutes Note */}
         <div className="flex items-start gap-3 p-3.5 rounded-xl bg-gray-800/30 border border-brand-border/50 text-xs text-gray-300">
           <ShieldAlert className="size-4 text-amber-400 shrink-0 mt-0.5" />
           <span>
@@ -172,7 +165,6 @@ export const RulesPage: FC = () => {
         </div>
       </section>
 
-      {/* 3. Two-Legged Playoff Qualification */}
       <section className="space-y-4">
         <div className="flex items-center gap-2.5">
           <Layers className="size-5 text-indigo-400" />
@@ -194,7 +186,7 @@ export const RulesPage: FC = () => {
             In two-legged knockout ties, you can predict which team will advance
             to the next round overall.
           </p>
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 p-3 rounded-lg bg-[#0d1117] border border-brand-border/40 text-xs">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 p-3 rounded-lg bg-brand-page border border-brand-border/40 text-xs">
             <span className="text-gray-400">
               Pick must be submitted{" "}
               <strong className="text-white">
@@ -209,7 +201,6 @@ export const RulesPage: FC = () => {
         </div>
       </section>
 
-      {/* 4. Bonus Predictions */}
       <section className="space-y-4">
         <div className="flex items-center gap-2.5">
           <Zap className="size-5 text-purple-400" />
@@ -223,7 +214,7 @@ export const RulesPage: FC = () => {
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
-            <div className="bg-[#0d1117] p-3 rounded-lg border border-brand-border/40">
+            <div className="bg-brand-page p-3 rounded-lg border border-brand-border/40">
               <span className="text-[10px] uppercase font-bold text-gray-500 block mb-1">
                 Deadline
               </span>
@@ -233,7 +224,7 @@ export const RulesPage: FC = () => {
               </span>
             </div>
 
-            <div className="bg-[#0d1117] p-3 rounded-lg border border-brand-border/40">
+            <div className="bg-brand-page p-3 rounded-lg border border-brand-border/40">
               <span className="text-[10px] uppercase font-bold text-gray-500 block mb-1">
                 Points Awarded
               </span>
@@ -242,7 +233,7 @@ export const RulesPage: FC = () => {
               </span>
             </div>
 
-            <div className="bg-[#0d1117] p-3 rounded-lg border border-brand-border/40">
+            <div className="bg-brand-page p-3 rounded-lg border border-brand-border/40">
               <span className="text-[10px] uppercase font-bold text-gray-500 block mb-1">
                 Value
               </span>
@@ -254,7 +245,6 @@ export const RulesPage: FC = () => {
         </div>
       </section>
 
-      {/* 5. Deadlines & Locking */}
       <section className="space-y-4">
         <div className="flex items-center gap-2.5">
           <Clock className="size-5 text-blue-400" />
@@ -288,7 +278,6 @@ export const RulesPage: FC = () => {
         </div>
       </section>
 
-      {/* 6. Tie-breaker Criteria */}
       <section className="space-y-4">
         <div className="flex items-center gap-2.5">
           <ArrowUpDown className="size-5 text-amber-400" />
@@ -305,7 +294,7 @@ export const RulesPage: FC = () => {
           </p>
 
           <ol className="space-y-2 pt-1 text-xs sm:text-sm font-medium">
-            <li className="flex items-center gap-3 p-2.5 rounded-lg bg-[#0d1117] border border-brand-border/40">
+            <li className="flex items-center gap-3 p-2.5 rounded-lg bg-brand-page border border-brand-border/40">
               <span className="size-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs shrink-0">
                 1
               </span>
@@ -313,7 +302,7 @@ export const RulesPage: FC = () => {
                 Most Exact Score predictions (+3 pts)
               </span>
             </li>
-            <li className="flex items-center gap-3 p-2.5 rounded-lg bg-[#0d1117] border border-brand-border/40">
+            <li className="flex items-center gap-3 p-2.5 rounded-lg bg-brand-page border border-brand-border/40">
               <span className="size-6 rounded-full bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-xs shrink-0">
                 2
               </span>
@@ -321,7 +310,7 @@ export const RulesPage: FC = () => {
                 Most Goal Difference predictions (+2 pts)
               </span>
             </li>
-            <li className="flex items-center gap-3 p-2.5 rounded-lg bg-[#0d1117] border border-brand-border/40">
+            <li className="flex items-center gap-3 p-2.5 rounded-lg bg-brand-page border border-brand-border/40">
               <span className="size-6 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-xs shrink-0">
                 3
               </span>
@@ -329,7 +318,7 @@ export const RulesPage: FC = () => {
                 Most Outcome / Winner predictions (+1 pt)
               </span>
             </li>
-            <li className="flex items-center gap-3 p-2.5 rounded-lg bg-[#0d1117] border border-brand-border/40">
+            <li className="flex items-center gap-3 p-2.5 rounded-lg bg-brand-page border border-brand-border/40">
               <span className="size-6 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-xs shrink-0">
                 4
               </span>
@@ -337,7 +326,7 @@ export const RulesPage: FC = () => {
                 Most Correct Two-Legged Qualified Picks (+1 pt)
               </span>
             </li>
-            <li className="flex items-center gap-3 p-2.5 rounded-lg bg-[#0d1117] border border-brand-border/40">
+            <li className="flex items-center gap-3 p-2.5 rounded-lg bg-brand-page border border-brand-border/40">
               <span className="size-6 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold text-xs shrink-0">
                 5
               </span>

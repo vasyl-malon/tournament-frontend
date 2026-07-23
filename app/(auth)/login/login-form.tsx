@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import Image from "next/image";
-import { AlertCircle, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,11 +19,10 @@ import { Input } from "@/components/ui/input";
 import { useLogin } from "@/lib/api";
 import { useAuthStore } from "@/store/auth.store";
 import { LoginSchema } from "./login.schema";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Spinner } from "@/components/ui/spinner";
 
-export function LoginForm({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
+export const LoginForm = () => {
   const router = useRouter();
   const { mutate, isPending, error, data, isSuccess } = useLogin();
   const { setAuth, setTournamentId, tournamentId } = useAuthStore();
@@ -51,7 +49,7 @@ export function LoginForm({
       router.push(callbackUrl || "/");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, isSuccess]);
+  }, [isSuccess]);
 
   const handleSubmit = (values: z.infer<typeof LoginSchema>) => {
     mutate({
@@ -61,115 +59,68 @@ export function LoginForm({
   };
 
   return (
-    <div className={cn("w-full max-w-sm mx-auto", className)} {...props}>
-      <Card className="bg-[#161b22] border-brand-border/80 shadow-2xl rounded-md text-white">
-        <CardHeader className="space-y-3 text-center pb-6">
-          {/* Logo Badge */}
-          <div className="mx-auto size-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center p-2">
-            <Image
-              src="/logo.svg"
-              alt="Predict The Win"
-              width={28}
-              height={28}
-              className="object-contain"
-            />
-          </div>
-
-          <div className="space-y-1">
-            <CardTitle className="text-xl font-black tracking-tight text-white">
-              Welcome Back
-            </CardTitle>
-            <CardDescription className="text-xs text-gray-400">
-              Enter your credentials to access your predictions
-            </CardDescription>
-          </div>
-        </CardHeader>
-
-        <CardContent>
-          <form
-            onSubmit={form.handleSubmit(handleSubmit)}
-            className="space-y-4"
-          >
-            {/* Server Error Alert */}
-            {error && (
-              <div className="flex items-center gap-2.5 p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-medium animate-in fade-in duration-200">
-                <AlertCircle className="size-4 shrink-0 text-red-400" />
-                <span>{error.message || "Invalid email or password"}</span>
-              </div>
-            )}
-
-            {/* Email Field */}
-            <div className="space-y-1.5">
-              <label
-                htmlFor="email"
-                className="text-xs font-semibold text-gray-300 block"
-              >
-                Email Address
-              </label>
-              <div className="relative">
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="name@example.com"
-                  autoComplete="email"
-                  disabled={isPending}
-                  className="bg-brand-page rounded-lg text-sm"
-                  {...form.register("email")}
-                />
-              </div>
-              {form.formState.errors.email && (
-                <p className="text-[11px] text-red-400 font-medium pl-1">
-                  {form.formState.errors.email.message}
-                </p>
-              )}
-            </div>
-
-            {/* Password Field */}
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
-                <label
-                  htmlFor="password"
-                  className="text-xs font-semibold text-gray-300"
-                >
-                  Password
-                </label>
-              </div>
+    <Card className="text-white border !border-brand-border rounded-md w-full max-w-md">
+      <CardHeader>
+        <div className="mx-auto size-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center p-2">
+          <Image
+            src="/logo.svg"
+            alt="Predict The Win"
+            width={28}
+            height={28}
+            className="object-contain"
+          />
+        </div>
+        <CardTitle className="text-xl text-center">Welcome Back</CardTitle>
+        <CardDescription className="text-center text-gray-400">
+          Enter your credentials to access your predictions
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={form.handleSubmit(handleSubmit)}>
+          <FieldGroup>
+            <Field>
+              <FieldLabel htmlFor="email">Email</FieldLabel>
+              <Input
+                id="email"
+                placeholder="example@gmail.com"
+                required
+                error={form.formState.errors.email}
+                {...form.register("email")}
+              />
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="password">Password</FieldLabel>
               <Input
                 id="password"
                 type="password"
-                placeholder="••••••••"
-                autoComplete="current-password"
-                disabled={isPending}
-                className="bg-brand-page rounded-lg text-sm"
+                required
+                placeholder="********"
+                error={form.formState.errors.password}
                 {...form.register("password")}
               />
-              {form.formState.errors.password && (
-                <p className="text-[11px] text-red-400 font-medium pl-1">
-                  {form.formState.errors.password.message}
-                </p>
-              )}
-            </div>
-
-            {/* Submit Button */}
-            <Button
-              type="submit"
-              variant="primary"
-              // size="lg"
-              disabled={!form.formState.isValid || isPending}
-              className="w-full mt-4"
-            >
-              {isPending ? (
-                <>
-                  <Loader2 className="size-4 mr-2 animate-spin" />
-                  Signing in...
-                </>
-              ) : (
-                "Sign In"
-              )}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
-    </div>
+            </Field>
+            {error ? (
+              <span className="text-red-400 text-sm text-center block">
+                {error.message}
+              </span>
+            ) : null}
+            <Field>
+              <Button
+                type="submit"
+                variant="primary"
+                disabled={!form.formState.isValid || isPending}
+                className="w-full"
+              >
+                <Spinner
+                  data-icon="inline-start"
+                  className={cn("hidden", isPending && "inline")}
+                />
+                Sign In
+              </Button>
+            </Field>
+          </FieldGroup>
+        </form>
+      </CardContent>
+    </Card>
   );
-}
+};

@@ -20,11 +20,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useAuthStore } from "@/store/auth.store";
 import { useRouter, useSearchParams } from "next/navigation";
+import Image from "next/image";
 
-export function RegisterForm({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
+export const RegisterForm = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { setAuth, setTournamentId, tournamentId } = useAuthStore();
@@ -34,13 +32,16 @@ export function RegisterForm({
   const { mutate, isPending, error, data, isSuccess } = useRegister();
 
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess && data) {
       setAuth(data.token, data.user);
-      if (!tournamentId && data.lastTournamentId)
-        setTournamentId(data.lastTournamentId);
-      router.push(tournamentId ? `${tournamentId}/dashboard` : "/dashboard");
+
+      const activeTournamentId = tournamentId || data.lastTournamentId;
+      setTournamentId(activeTournamentId || "");
+
+      router.push("/");
     }
-  }, [data, isSuccess, tournamentId, router, setAuth, setTournamentId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess]);
 
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
@@ -58,19 +59,22 @@ export function RegisterForm({
   };
 
   return (
-    <Card
-      className={cn(
-        "!text-white border !border-brand-border rounded-md w-full max-w-md",
-        className,
-      )}
-      {...props}
-    >
+    <Card className="text-white border !border-brand-border rounded-md w-full max-w-md">
       <CardHeader>
+        <div className="mx-auto size-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center p-2">
+          <Image
+            src="/logo.svg"
+            alt="Predict The Win"
+            width={28}
+            height={28}
+            className="object-contain"
+          />
+        </div>
         <CardTitle className="text-xl text-center">
           Create your account
         </CardTitle>
-        <CardDescription className="text-center">
-          Fill in your details to join the tournament
+        <CardDescription className="text-center text-gray-400">
+          Fill in your details to join the tournaments
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -121,13 +125,14 @@ export function RegisterForm({
               />
             </Field>
             {error ? (
-              <span className="text-red-500 text-sm text-center block">
+              <span className="text-red-400 text-sm text-center block">
                 {error.message}
               </span>
             ) : null}
             <Field>
               <Button
                 type="submit"
+                variant="primary"
                 disabled={!form.formState.isValid || isPending}
                 className="w-full"
               >
@@ -143,4 +148,4 @@ export function RegisterForm({
       </CardContent>
     </Card>
   );
-}
+};

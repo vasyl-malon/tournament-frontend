@@ -42,8 +42,10 @@ const NAV_ITEMS = [
 export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
-  const { user, setTournamentId, logout } = useAuthStore();
+  const { user, setTournamentId, tournamentId, logout } = useAuthStore();
   const { id } = useParams<{ id: string }>();
+
+  const activeTournamentId = id || tournamentId;
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -80,8 +82,11 @@ export default function Header() {
   const handleTournamentChange = (newTournamentId: string | null) => {
     setTournamentId(newTournamentId || "");
 
-    if (id && pathname.includes(`/${id}`)) {
-      const updatedPath = pathname.replace(`/${id}`, `/${newTournamentId}`);
+    if (activeTournamentId && pathname.includes(`/${activeTournamentId}`)) {
+      const updatedPath = pathname.replace(
+        `/${activeTournamentId}`,
+        `/${newTournamentId}`,
+      );
       router.push(updatedPath);
     } else {
       router.push(`/${newTournamentId}/dashboard`);
@@ -89,13 +94,15 @@ export default function Header() {
   };
 
   const selectedTournamentLabel = tournamentOptions.find(
-    (item) => item.value === String(id),
+    (item) => item.value === String(activeTournamentId),
   )?.label;
 
   return (
     <header className="fixed top-0 left-0 right-0 h-16 w-full bg-brand-page/85 backdrop-blur-md text-white border-b border-brand-border/60 z-50 transition-all">
-      <div className="flex max-w-[87.5rem] mx-auto px-4 md:px-8 w-full h-full items-center justify-between gap-x-4">
-        <Link href={id ? `/${id}/dashboard` : "/"}>
+      <div className="flex max-w-[87.5rem] mx-auto px-4 md:px-8 w-full h-full items-center justify-between gap-x-4 grow">
+        <Link
+          href={activeTournamentId ? `/${activeTournamentId}/dashboard` : "/"}
+        >
           <div>
             <Image
               src="/logo-full.svg"
@@ -111,7 +118,7 @@ export default function Header() {
         <nav className="hidden xl:flex items-center gap-x-1">
           {NAV_ITEMS.map((item) => {
             const Icon = item.icon;
-            const targetHref = `/${id}${item.href}`;
+            const targetHref = `/${activeTournamentId}${item.href}`;
             const isActive =
               pathname === targetHref || pathname.startsWith(`${targetHref}/`);
 
@@ -135,7 +142,7 @@ export default function Header() {
 
         <div className="hidden xl:flex items-center gap-x-4 shrink-0">
           <Select
-            value={id ? String(id) : undefined}
+            value={activeTournamentId ? String(activeTournamentId) : undefined}
             onValueChange={handleTournamentChange}
             disabled={isLoading || isFetching}
           >
@@ -163,7 +170,7 @@ export default function Header() {
 
           <div className="flex items-center gap-x-3 grow">
             <Link
-              href={`/${id}/profile`}
+              href="/profile"
               className="flex items-center gap-2.5 p-2 rounded-xl hover:bg-[#161b22] transition-colors group w-max"
             >
               <div className="size-8 rounded-lg bg-[#161b22] border border-brand-border flex items-center justify-center text-gray-300 group-hover:border-emerald-500/40 group-hover:text-emerald-400 transition-colors">
@@ -216,7 +223,9 @@ export default function Header() {
                   Active Tournament
                 </span>
                 <Select
-                  value={id ? String(id) : undefined}
+                  value={
+                    activeTournamentId ? String(activeTournamentId) : undefined
+                  }
                   onValueChange={(val) => {
                     handleTournamentChange(val);
                     setIsMenuOpen(false);
@@ -251,7 +260,7 @@ export default function Header() {
                 <ul className="flex flex-col gap-y-1">
                   {NAV_ITEMS.map((item) => {
                     const Icon = item.icon;
-                    const targetHref = `/${id}${item.href}`;
+                    const targetHref = `/${activeTournamentId}${item.href}`;
                     const isActive =
                       pathname === targetHref ||
                       pathname.startsWith(`${targetHref}/`);

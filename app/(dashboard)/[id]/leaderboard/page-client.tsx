@@ -21,7 +21,7 @@ export const LeaderboardTable = () => {
     tournamentId,
   });
 
-  const leaderboardData: Statistic[] = data?.data || [];
+  const leaderboardData: Statistic[] = data?.data.data || [];
 
   const tabs = [
     {

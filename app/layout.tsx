@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   description: "Predict your win",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

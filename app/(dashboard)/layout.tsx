@@ -2,17 +2,25 @@ import type { Metadata } from "next";
 import Header from "@/app/components/header";
 import Footer from "../components/footer";
 import "../globals.css";
+import { getAuthServerSession } from "@/lib/auth-server";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Betting App",
   description: "Football predictions",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getAuthServerSession();
+
+  if (!session?.accessToken) {
+    redirect("/login");
+  }
+
   return (
     <div className="flex flex-col min-h-screen">
       <Header />

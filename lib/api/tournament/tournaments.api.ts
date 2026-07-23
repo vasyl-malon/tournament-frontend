@@ -4,8 +4,8 @@ import {
 } from "./tournaments.types";
 
 export const tournamentApi = {
-  getMy: async () => {
-    const res = await api.get<GetMyTournamentsResponse>("/tournaments/my");
+  getMy: async (headers: any) => {
+    const res = await api.get<GetMyTournamentsResponse>("/tournaments/my", headers);
     return res.data;
   },
 };

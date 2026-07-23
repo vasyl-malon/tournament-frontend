@@ -5,5 +5,7 @@ export type GetLeaderboardParams = {
 };
 
 export type GetLeaderboardResponse = {
-  data: Array<Statistic>;
+  data: {
+    data: Array<Statistic>;
+  };
 };

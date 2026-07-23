@@ -1,13 +1,12 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import Image from "next/image";
-import { AlertCircle, Loader2, Lock, Mail } from "lucide-react";
-
+import { AlertCircle, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,6 +29,9 @@ export function LoginForm({
   const { mutate, isPending, error, data, isSuccess } = useLogin();
   const { setAuth, setTournamentId, tournamentId } = useAuthStore();
 
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl");
+
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     mode: "onChange",
@@ -39,22 +41,17 @@ export function LoginForm({
     },
   });
 
-  // Авторизація та якісний редирект
   useEffect(() => {
     if (isSuccess && data) {
       setAuth(data.token, data.user);
 
-      // Визначаємо актуальний турнір для редиректу
       const activeTournamentId = tournamentId || data.lastTournamentId;
+      setTournamentId(activeTournamentId || "");
 
-      if (activeTournamentId) {
-        setTournamentId(activeTournamentId);
-        router.push(`/${activeTournamentId}/dashboard`);
-      } else {
-        router.push("/dashboard");
-      }
+      router.push(callbackUrl || "/");
     }
-  }, [data, isSuccess, tournamentId, router, setAuth, setTournamentId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, isSuccess]);
 
   const handleSubmit = (values: z.infer<typeof LoginSchema>) => {
     mutate({
@@ -143,7 +140,7 @@ export function LoginForm({
                 placeholder="••••••••"
                 autoComplete="current-password"
                 disabled={isPending}
-                  className="bg-brand-page rounded-lg text-sm"
+                className="bg-brand-page rounded-lg text-sm"
                 {...form.register("password")}
               />
               {form.formState.errors.password && (

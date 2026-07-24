@@ -46,6 +46,11 @@ export const LoginForm = () => {
       const activeTournamentId = tournamentId || data.lastTournamentId;
       setTournamentId(activeTournamentId || "");
 
+      if (data.user.role === "ADMIN") {
+        router.push(callbackUrl || "/admin/dashboard");
+        return;
+      }
+
       router.push(callbackUrl || "/dashboard");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

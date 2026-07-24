@@ -8,7 +8,12 @@ import {
 } from "./prediction/prediction.queries";
 import { useGetTeams, useGetPlayers } from "./team/team.queries";
 import { useGetLeaderboard } from "./leaderboard/leaderboard.queries";
-import { useGetMyTournaments } from "./tournament/tournaments.queries";
+import {
+  getParticipantsOverview,
+  useGetMyTournaments,
+  useInviteUser,
+} from "./tournament/tournaments.queries";
+import { useGetActiveUsers } from "./user/user.queries";
 
 export {
   useLogin,
@@ -22,4 +27,7 @@ export {
   useAddPrediction,
   useAddBonusPrediction,
   useGetMyTournaments,
+  useGetActiveUsers,
+  useInviteUser,
+  getParticipantsOverview,
 };

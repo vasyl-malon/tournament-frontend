@@ -2,7 +2,7 @@ import { getAuthServerSession } from "@/lib/auth-server";
 import { tournamentApi } from "@/lib/api/tournament/tournaments.api";
 import { redirect } from "next/navigation";
 
-export default async function DashboardRootPage() {
+export default async function AdminDashboardRootPage() {
   const session = await getAuthServerSession();
 
   if (!session?.accessToken) {
@@ -33,5 +33,5 @@ export default async function DashboardRootPage() {
     ? session.tournamentId
     : tournaments.data[0].id;
 
-  redirect(`/${targetId}/dashboard`);
+  redirect(`/${targetId}/admin/dashboard`);
 }

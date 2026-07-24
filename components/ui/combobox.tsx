@@ -13,11 +13,11 @@ import {
 } from "@/components/ui/input-group";
 import { ChevronDownIcon, XIcon, CheckIcon } from "lucide-react";
 
-function Combobox({
+function Combobox<T>({
   error,
   children,
   ...props
-}: ComboboxPrimitive.Root.Props<number | null, false> & {
+}: ComboboxPrimitive.Root.Props<T | null, false> & {
   error?: React.ReactNode;
 }) {
   return (

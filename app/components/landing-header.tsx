@@ -10,7 +10,8 @@ export const LandingHeader = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const { accessToken, tournamentId } = useAuthStore();
+  const { accessToken, getActiveTournamentId } = useAuthStore();
+  const tournamentId = getActiveTournamentId()
 
   const dashboardHref = tournamentId
     ? `/${tournamentId}/dashboard`

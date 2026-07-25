@@ -14,7 +14,8 @@ import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/lib/auth.store";
 
 export function HomePage() {
-  const { tournamentId, accessToken } = useAuthStore();
+  const { getActiveTournamentId, accessToken } = useAuthStore();
+  const tournamentId = getActiveTournamentId();
 
   const dashboardHref = tournamentId
     ? `/${tournamentId}/dashboard`

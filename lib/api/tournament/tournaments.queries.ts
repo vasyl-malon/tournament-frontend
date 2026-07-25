@@ -1,11 +1,17 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { tournamentApi } from "./tournaments.api";
-import { GetParticipantsOverviewParams } from "./tournaments.types";
+import {
+  GetParticipantsOverviewParams,
+  GetTournamentsResponse,
+} from "./tournaments.types";
 
-export const useGetMyTournaments = () =>
+export const useGetMyTournaments = (
+  queryParams?: Partial<UseQueryOptions<GetTournamentsResponse>>,
+) =>
   useQuery({
-    queryKey: ["get-branches"],
+    queryKey: ["get-my-tournaments"],
     queryFn: tournamentApi.getMy,
+    ...queryParams,
   });
 
 export const useAddParticipant = () =>
@@ -20,10 +26,19 @@ export const useInviteUser = () =>
     mutationFn: tournamentApi.inviteUser,
   });
 
-export const getParticipantsOverview = (
+export const useGetParticipantsOverview = (
   params: GetParticipantsOverviewParams,
 ) =>
   useQuery({
     queryKey: ["get-participants-overview"],
     queryFn: () => tournamentApi.getParticipantsOverview(params),
+  });
+
+export const useGetAllTournaments = (
+  queryParams?: Partial<UseQueryOptions<GetTournamentsResponse>>,
+) =>
+  useQuery({
+    queryKey: ["get-all-tournaments"],
+    queryFn: tournamentApi.getAll,
+    ...queryParams,
   });

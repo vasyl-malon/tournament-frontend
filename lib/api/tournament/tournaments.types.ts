@@ -1,4 +1,4 @@
-export type GetMyTournamentsResponse = {
+export type GetTournamentsResponse = {
   data: {
     apiCode: string;
     createdAt: string;

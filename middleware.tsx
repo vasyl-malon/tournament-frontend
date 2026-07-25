@@ -26,7 +26,6 @@ export function middleware(request: NextRequest) {
 
   if (!isAuthenticated && !isAuthPage && !noRedirectPage) {
     const loginUrl = new URL("/login", request.url);
-    loginUrl.searchParams.set("callbackUrl", pathname);
     return NextResponse.redirect(loginUrl);
   }
 

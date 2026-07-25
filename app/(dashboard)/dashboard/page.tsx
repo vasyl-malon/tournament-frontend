@@ -9,14 +9,18 @@ export default async function DashboardRootPage() {
     redirect("/login");
   }
 
+  const isAdmin = session.user?.role === "ADMIN";
+
   let tournaments;
   try {
-    tournaments = await tournamentApi.getMy({
-      headers: {
-        Authorization: `Bearer ${session?.accessToken}`,
-        "Content-Type": "application/json",
-      },
-    });
+    const headers = {
+      Authorization: `Bearer ${session.accessToken}`,
+      "Content-Type": "application/json",
+    };
+
+    tournaments = isAdmin
+      ? await tournamentApi.getAll({ headers })
+      : await tournamentApi.getMy({ headers });
   } catch {
     redirect("/login");
   }
@@ -25,13 +29,17 @@ export default async function DashboardRootPage() {
     redirect("/no-tournaments");
   }
 
+  const savedTournamentId = isAdmin
+    ? session.adminTournamentId || session.tournamentId
+    : session.userTournamentId || session.tournamentId;
+
   const hasSavedTournament = tournaments.data.some(
-    (t) => t.id === session.tournamentId,
+    (t) => String(t.id) === String(savedTournamentId),
   );
 
   const targetId = hasSavedTournament
-    ? session.tournamentId
+    ? savedTournamentId
     : tournaments.data[0].id;
 
-  redirect(`/${targetId}/dashboard`);
+  redirect(isAdmin ? `/${targetId}/dashboard` : `/${targetId}/admin/dashboard`);
 }

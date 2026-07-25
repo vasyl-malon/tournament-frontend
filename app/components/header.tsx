@@ -16,6 +16,8 @@ import {
   Menu,
   X,
   BookOpen,
+  Settings2,
+  ShieldCheck,
 } from "lucide-react";
 import { useAuthStore } from "@/lib/auth.store";
 import {
@@ -28,7 +30,20 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { useGetMyTournaments } from "@/lib/api";
+import { useGetMyTournaments, useGetAllTournaments } from "@/lib/api";
+
+const ADMIN_NAV_ITEMS = [
+  {
+    name: "Dashboard",
+    href: "/admin/dashboard",
+    icon: Home,
+  },
+  {
+    name: "Control & Settings",
+    href: "/admin/settings",
+    icon: Settings2,
+  },
+];
 
 const NAV_ITEMS = [
   { name: "Dashboard", href: "/dashboard", icon: Home },
@@ -42,15 +57,24 @@ const NAV_ITEMS = [
 export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
-  const { user, setTournamentId, tournamentId, logout } = useAuthStore();
+  const { user, setTournamentId, getActiveTournamentId, logout } =
+    useAuthStore();
   const { id } = useParams<{ id: string }>();
 
-  const activeTournamentId = id || tournamentId;
+  const isAdmin = user?.role === "ADMIN";
+
+  const storedTournamentId = getActiveTournamentId();
+  const activeTournamentId = id || storedTournamentId;
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  const { data, isLoading, isFetching } = useGetMyTournaments();
+  const myTournamentsQuery = useGetMyTournaments({ enabled: !isAdmin });
+  const allTournamentsQuery = useGetAllTournaments({ enabled: isAdmin });
+
+  const { data, isLoading, isFetching } = isAdmin
+    ? allTournamentsQuery
+    : myTournamentsQuery;
 
   const tournamentOptions =
     data?.data?.map((item) => ({
@@ -80,7 +104,11 @@ export default function Header() {
   }, [isMenuOpen]);
 
   const handleTournamentChange = (newTournamentId: string | null) => {
-    setTournamentId(newTournamentId || "");
+    if (!newTournamentId) return;
+
+    setTournamentId(newTournamentId);
+
+    const defaultLanding = isAdmin ? "/admin/dashboard" : "/dashboard";
 
     if (activeTournamentId && pathname.includes(`/${activeTournamentId}`)) {
       const updatedPath = pathname.replace(
@@ -89,7 +117,7 @@ export default function Header() {
       );
       router.push(updatedPath);
     } else {
-      router.push(`/${newTournamentId}/dashboard`);
+      router.push(`/${newTournamentId}${defaultLanding}`);
     }
   };
 
@@ -97,12 +125,18 @@ export default function Header() {
     (item) => item.value === String(activeTournamentId),
   )?.label;
 
+  const items = isAdmin ? ADMIN_NAV_ITEMS : NAV_ITEMS;
+
+  const logoHref = activeTournamentId
+    ? `/${activeTournamentId}${isAdmin ? "/admin/dashboard" : "/dashboard"}`
+    : isAdmin
+      ? "/admin/dashboard"
+      : "/dashboard";
+
   return (
     <header className="fixed top-0 left-0 right-0 h-16 w-full bg-brand-page/85 backdrop-blur-md text-white border-b border-brand-border/60 z-50 transition-all">
       <div className="flex max-w-[87.5rem] mx-auto px-4 md:px-8 w-full h-full items-center justify-between gap-x-4 grow">
-        <Link
-          href={activeTournamentId ? `/${activeTournamentId}/dashboard` : "/dashboard"}
-        >
+        <Link href={logoHref}>
           <div>
             <Image
               src="/logo-full.svg"
@@ -116,7 +150,7 @@ export default function Header() {
         </Link>
 
         <nav className="hidden xl:flex items-center gap-x-1">
-          {NAV_ITEMS.map((item) => {
+          {items.map((item) => {
             const Icon = item.icon;
             const targetHref = `/${activeTournamentId}${item.href}`;
             const isActive =
@@ -169,22 +203,31 @@ export default function Header() {
           <div className="h-4 w-px bg-brand-border/60" />
 
           <div className="flex items-center gap-x-3 grow">
-            <Link
-              href="/profile"
-              className="flex items-center gap-2.5 p-2 rounded-xl hover:bg-[#161b22] transition-colors group w-max"
-            >
-              <div className="size-8 rounded-lg bg-[#161b22] border border-brand-border flex items-center justify-center text-gray-300 group-hover:border-emerald-500/40 group-hover:text-emerald-400 transition-colors">
-                <User className="size-4" />
+            {isAdmin ? (
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center gap-1 text-[0.625rem] font-bold tracking-wider uppercase bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-1 rounded-md">
+                  <ShieldCheck className="size-3" />
+                  Admin
+                </span>
               </div>
-              <div className="text-start leading-tight hidden xl:block">
-                <p className="text-xs font-bold text-white group-hover:text-emerald-400 transition-colors">
-                  {user?.firstName} {user?.lastName}
-                </p>
-                <p className="text-[0.625rem] text-gray-400 pt-1">
-                  View Profile
-                </p>
-              </div>
-            </Link>
+            ) : (
+              <Link
+                href="/profile"
+                className="flex items-center gap-2.5 p-2 rounded-xl hover:bg-[#161b22] transition-colors group w-max"
+              >
+                <div className="size-8 rounded-lg bg-[#161b22] border border-brand-border flex items-center justify-center text-gray-300 group-hover:border-emerald-500/40 group-hover:text-emerald-400 transition-colors">
+                  <User className="size-4" />
+                </div>
+                <div className="text-start leading-tight hidden xl:block">
+                  <p className="text-xs font-bold text-white group-hover:text-emerald-400 transition-colors">
+                    {user?.firstName} {user?.lastName}
+                  </p>
+                  <p className="text-[0.625rem] text-gray-400 pt-1">
+                    View Profile
+                  </p>
+                </div>
+              </Link>
+            )}
 
             <button
               onClick={() => {
@@ -258,7 +301,7 @@ export default function Header() {
                   Navigation
                 </span>
                 <ul className="flex flex-col gap-y-1">
-                  {NAV_ITEMS.map((item) => {
+                  {items.map((item) => {
                     const Icon = item.icon;
                     const targetHref = `/${activeTournamentId}${item.href}`;
                     const isActive =
@@ -289,23 +332,30 @@ export default function Header() {
               <div className="h-px bg-brand-border/60" />
 
               <div className="flex items-center justify-between pt-1">
-                <Link
-                  href="/profile"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="flex items-center gap-3 text-xs font-medium hover:text-white transition-colors"
-                >
-                  <div className="size-9 bg-[#161b22] rounded-xl border border-brand-border flex items-center justify-center text-emerald-400">
-                    <User className="size-4" />
-                  </div>
-                  <div className="leading-tight">
-                    <p className="font-bold text-white text-xs">
-                      {user?.firstName} {user?.lastName}
-                    </p>
-                    <p className="text-[0.625rem] text-gray-500 pt-1">
-                      View account details
-                    </p>
-                  </div>
-                </Link>
+                {isAdmin ? (
+                  <span className="inline-flex items-center gap-1 text-[0.625rem] font-bold tracking-wider uppercase bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-1 rounded-md">
+                    <ShieldCheck className="size-3" />
+                    Admin
+                  </span>
+                ) : (
+                  <Link
+                    href="/profile"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="flex items-center gap-3 text-xs font-medium hover:text-white transition-colors"
+                  >
+                    <div className="size-9 bg-[#161b22] rounded-xl border border-brand-border flex items-center justify-center text-emerald-400">
+                      <User className="size-4" />
+                    </div>
+                    <div className="leading-tight">
+                      <p className="font-bold text-white text-xs">
+                        {user?.firstName} {user?.lastName}
+                      </p>
+                      <p className="text-[0.625rem] text-gray-500 pt-1">
+                        View account details
+                      </p>
+                    </div>
+                  </Link>
+                )}
                 <Button
                   size="sm"
                   variant="destructive"

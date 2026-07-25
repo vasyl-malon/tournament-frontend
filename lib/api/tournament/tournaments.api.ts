@@ -2,7 +2,7 @@ import { AxiosRequestConfig } from "axios";
 import { api } from "../http";
 import {
   AddParticipantParams,
-  GetMyTournamentsResponse,
+  GetTournamentsResponse,
   GetParticipantsOverviewParams,
   GetParticipantsOverviewResponse,
   InviteUserParams,
@@ -11,8 +11,16 @@ import {
 
 export const tournamentApi = {
   getMy: async (headers: AxiosRequestConfig) => {
-    const res = await api.get<GetMyTournamentsResponse>(
+    const res = await api.get<GetTournamentsResponse>(
       "/tournaments/my",
+      headers,
+    );
+    return res.data;
+  },
+
+  getAll: async (headers: AxiosRequestConfig) => {
+    const res = await api.get<GetTournamentsResponse>(
+      "/tournaments/all",
       headers,
     );
     return res.data;

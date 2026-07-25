@@ -17,7 +17,6 @@ import z from "zod";
 import { useForm } from "react-hook-form";
 import { RegisterSchema } from "./register.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
 import { useAuthStore } from "@/lib/auth.store";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
@@ -25,23 +24,11 @@ import Image from "next/image";
 export const RegisterForm = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { setAuth, setTournamentId, tournamentId } = useAuthStore();
+  const { setAuth, getActiveTournamentId } = useAuthStore();
 
   const token = searchParams.get("token") || "";
 
-  const { mutate, isPending, error, data, isSuccess } = useRegister();
-
-  useEffect(() => {
-    if (isSuccess && data) {
-      setAuth(data.token, data.user);
-
-      const activeTournamentId = tournamentId || data.lastTournamentId;
-      setTournamentId(activeTournamentId || "");
-
-      router.push("/dashboard");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSuccess]);
+  const { mutate, isPending, error } = useRegister();
 
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
@@ -49,13 +36,25 @@ export const RegisterForm = () => {
   });
 
   const handleSubmit = (values: z.infer<typeof RegisterSchema>) => {
-    mutate({
-      token,
-      firstName: values.firstName,
-      lastName: values.lastName,
-      password: values.password,
-      confirmPassword: values.confirmPassword,
-    });
+    mutate(
+      {
+        token,
+        firstName: values.firstName,
+        lastName: values.lastName,
+        password: values.password,
+        confirmPassword: values.confirmPassword,
+      },
+      {
+        onSuccess: (data) => {
+          const tournamentId = getActiveTournamentId();
+          const activeTournamentId = tournamentId || data.lastTournamentId;
+
+          setAuth(data.token, data.user, activeTournamentId);
+
+          router.push("/dashboard");
+        },
+      },
+    );
   };
 
   return (

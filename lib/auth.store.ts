@@ -14,17 +14,22 @@ type User = {
 type AuthState = {
   accessToken: string | null;
   user: User | null;
-  tournamentId: string | null;
+  userTournamentId: string | null;
+  adminTournamentId: string | null;
 
-  setAuth: (token: string, user: User) => void;
-  setTournamentId: (id: string) => void;
+  setAuth: (
+    token: string,
+    user: User,
+    initialTournamentId?: string | null,
+  ) => void;
+  setTournamentId: (id: string | null) => void;
+  getActiveTournamentId: () => string | null;
+
   logout: () => void;
 };
 
 const cookieStorage: StateStorage = {
-  getItem: (name: string) => {
-    return Cookies.get(name) ?? null;
-  },
+  getItem: (name: string) => Cookies.get(name) ?? null,
   setItem: (name: string, value: string) => {
     Cookies.set(name, value, { expires: 7, path: "/" });
   },
@@ -35,21 +40,38 @@ const cookieStorage: StateStorage = {
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       accessToken: null,
       user: null,
-      tournamentId: null,
+      userTournamentId: null,
+      adminTournamentId: null,
 
-      setAuth: (token, user) =>
-        set({
-          accessToken: token,
-          user,
+      setAuth: (token, user, initialTournamentId = null) =>
+        set(() => {
+          const isAdmin = user.role === "ADMIN";
+          return {
+            accessToken: token,
+            user,
+            ...(initialTournamentId
+              ? isAdmin
+                ? { adminTournamentId: initialTournamentId }
+                : { userTournamentId: initialTournamentId }
+              : {}),
+          };
         }),
 
       setTournamentId: (id) =>
-        set({
-          tournamentId: id,
+        set((state) => {
+          const isAdmin = state.user?.role === "ADMIN";
+          return isAdmin ? { adminTournamentId: id } : { userTournamentId: id };
         }),
+
+      getActiveTournamentId: () => {
+        const state = get();
+        return state.user?.role === "ADMIN"
+          ? state.adminTournamentId
+          : state.userTournamentId;
+      },
 
       logout: () =>
         set({
@@ -63,7 +85,8 @@ export const useAuthStore = create<AuthState>()(
       partialize: (state) => ({
         accessToken: state.accessToken,
         user: state.user,
-        tournamentId: state.tournamentId,
+        userTournamentId: state.userTournamentId,
+        adminTournamentId: state.adminTournamentId,
       }),
     },
   ),

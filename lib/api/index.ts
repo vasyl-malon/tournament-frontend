@@ -9,9 +9,10 @@ import {
 import { useGetTeams, useGetPlayers } from "./team/team.queries";
 import { useGetLeaderboard } from "./leaderboard/leaderboard.queries";
 import {
-  getParticipantsOverview,
+  useGetParticipantsOverview,
   useGetMyTournaments,
   useInviteUser,
+  useGetAllTournaments,
 } from "./tournament/tournaments.queries";
 import { useGetActiveUsers } from "./user/user.queries";
 
@@ -29,5 +30,6 @@ export {
   useGetMyTournaments,
   useGetActiveUsers,
   useInviteUser,
-  getParticipantsOverview,
+  useGetParticipantsOverview,
+  useGetAllTournaments,
 };

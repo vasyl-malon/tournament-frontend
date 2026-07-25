@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
@@ -24,43 +23,31 @@ import { Spinner } from "@/components/ui/spinner";
 
 export const LoginForm = () => {
   const router = useRouter();
-  const { mutate, isPending, error, data, isSuccess } = useLogin();
-  const { setAuth, setTournamentId, tournamentId } = useAuthStore();
-
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl");
+  const { mutate, isPending, error } = useLogin();
+  const { setAuth, getActiveTournamentId } = useAuthStore();
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     mode: "onChange",
-    defaultValues: {
-      email: "",
-      password: "",
-    },
   });
 
-  useEffect(() => {
-    if (isSuccess && data) {
-      setAuth(data.token, data.user);
-
-      const activeTournamentId = tournamentId || data.lastTournamentId;
-      setTournamentId(activeTournamentId || "");
-
-      if (data.user.role === "ADMIN") {
-        router.push(callbackUrl || "/admin/dashboard");
-        return;
-      }
-
-      router.push(callbackUrl || "/dashboard");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSuccess]);
-
   const handleSubmit = (values: z.infer<typeof LoginSchema>) => {
-    mutate({
-      email: values.email,
-      password: values.password,
-    });
+    mutate(
+      {
+        email: values.email,
+        password: values.password,
+      },
+      {
+        onSuccess: (data) => {
+          const tournamentId = getActiveTournamentId();
+          const activeTournamentId = tournamentId || data.lastTournamentId;
+
+          setAuth(data.token, data.user, activeTournamentId);
+
+          router.push("/dashboard");
+        },
+      },
+    );
   };
 
   return (

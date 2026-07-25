@@ -1,5 +1,5 @@
-import { AdminDashboardPage } from "./page-client";
+import { AdminParticipants } from "./page-client";
 
 export default function Page() {
-  return <AdminDashboardPage />;
+  return <AdminParticipants />;
 }

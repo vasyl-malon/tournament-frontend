@@ -18,7 +18,7 @@ type MatchCardProps = {
 
 export const MatchCard: FC<MatchCardProps> = ({ item }) => {
   const { isPending, mutate } = useAddPrediction();
-  const bet = item.bets?.length ? item.bets[0] : null;
+  const bet = item.userBet ?? null;
 
   const [homeScore, setHomeScore] = useState<string>(
     bet?.homeScore?.toString() ?? "",

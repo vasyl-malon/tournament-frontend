@@ -44,7 +44,14 @@ export const LoginForm = () => {
 
           setAuth(data.token, data.user, activeTournamentId);
 
-          router.push("/dashboard");
+          if (!activeTournamentId) {
+            router.push("/no-tournaments");
+            return;
+          }
+
+          const targetPath =
+            data.user.role === "ADMIN" ? "admin/dashboard" : "dashboard";
+          router.push(`/${activeTournamentId}/${targetPath}`);
         },
       },
     );

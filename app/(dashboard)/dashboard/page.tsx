@@ -5,41 +5,43 @@ import { redirect } from "next/navigation";
 export default async function DashboardRootPage() {
   const session = await getAuthServerSession();
 
-  if (!session?.accessToken) {
-    redirect("/login");
-  }
+  if (!session?.accessToken) redirect("/login");
 
   const isAdmin = session.user?.role === "ADMIN";
 
-  let tournaments;
   try {
-    const headers = {
-      Authorization: `Bearer ${session.accessToken}`,
-      "Content-Type": "application/json",
-    };
-
-    tournaments = isAdmin
+    const headers = { Authorization: `Bearer ${session.accessToken}` };
+    const res = isAdmin
       ? await tournamentApi.getAll({ headers })
       : await tournamentApi.getMy({ headers });
-  } catch {
-    redirect("/login");
+
+    const available = res?.data || [];
+    if (available.length === 0) redirect("/no-tournaments");
+
+    const savedId = isAdmin
+      ? session.adminTournamentId
+      : session.userTournamentId;
+    const targetId = available.some((t) => String(t.id) === String(savedId))
+      ? savedId
+      : available[0].id;
+
+    const targetPath = isAdmin ? "admin/dashboard" : "dashboard";
+    redirect(`/${targetId}/${targetPath}`);
+  } catch (error: any) {
+    if (error?.response?.status === 401) {
+      redirect("/login");
+    }
+
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center bg-brand-page text-center text-white px-4">
+        <h2 className="text-xl font-bold mb-2">
+          Service Temporarily Unavailable 🚧
+        </h2>
+        <p className="text-gray-400 text-sm">
+          We are unable to connect to the server. Please try again in a few
+          minutes.
+        </p>
+      </div>
+    );
   }
-
-  if (!tournaments?.data || tournaments.data.length === 0) {
-    redirect("/no-tournaments");
-  }
-
-  const savedTournamentId = isAdmin
-    ? session.adminTournamentId || session.tournamentId
-    : session.userTournamentId || session.tournamentId;
-
-  const hasSavedTournament = tournaments.data.some(
-    (t) => String(t.id) === String(savedTournamentId),
-  );
-
-  const targetId = hasSavedTournament
-    ? savedTournamentId
-    : tournaments.data[0].id;
-
-  redirect(isAdmin ? `/${targetId}/dashboard` : `/${targetId}/admin/dashboard`);
 }

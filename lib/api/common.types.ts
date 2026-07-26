@@ -8,7 +8,7 @@ export enum MatchStage {
   FINAL = "FINAL",
   THIRD_PLACE = "THIRD_PLACE",
   SEMI_FINALS = "SEMI_FINALS",
-  QUARTER_FINALS = "QUARTER_FINALS",  
+  QUARTER_FINALS = "QUARTER_FINALS",
   LAST_16 = "LAST_16",
   LAST_32 = "LAST_32",
   LAST_64 = "LAST_64",
@@ -67,7 +67,7 @@ export type Match = {
   startTime: string;
   utcDate: string;
   status: MatchStatus;
-  bets: Array<Bet>;
+  userBet: Bet;
 };
 
 export type Statistic = {

@@ -206,7 +206,7 @@ export const BonusPredictionForm: FC<BonusPredictionFormProps> = ({ data }) => {
                   <Crown className="size-4" />
                 </div>
                 <span className="font-semibold text-sm text-white">
-                  Tournament Champion
+                  Champion
                 </span>
               </div>
               <span className="px-2 py-1 rounded-md bg-amber-500/20 border border-amber-500/60 text-amber-400 text-xs font-semibold">

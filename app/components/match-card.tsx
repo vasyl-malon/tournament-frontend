@@ -27,9 +27,7 @@ export const MatchCard: FC<MatchCardProps> = ({ item }) => {
     bet?.awayScore?.toString() ?? "",
   );
   const [advancingTeamId, setAdvancingTeamId] = useState<number | undefined>(
-    bet?.predictedAdvancingTeamId
-      ? Number(bet.predictedAdvancingTeamId)
-      : undefined,
+    bet?.predictedAdvancingTeamId ?? undefined,
   );
 
   const date = dayjs(item?.startTime).format("MMM DD, YYYY - HH:mm");
@@ -47,6 +45,8 @@ export const MatchCard: FC<MatchCardProps> = ({ item }) => {
       MatchStage.REGULAR_SEASON,
     ].includes(item.stage as MatchStage);
 
+  const isFirstLeg = item.matchday === 1;
+
   const totalPoints =
     (bet?.pointsEarned || 0) + (bet?.advancingPointsEarned || 0);
 
@@ -58,7 +58,7 @@ export const MatchCard: FC<MatchCardProps> = ({ item }) => {
     if (type === "home") setHomeScore(cleanVal);
     if (type === "away") setAwayScore(cleanVal);
 
-    if (isKnockout && !isStarted) {
+    if (isKnockout && isFirstLeg && !isStarted) {
       const h = parseInt(newHome);
       const a = parseInt(newAway);
 
@@ -120,7 +120,7 @@ export const MatchCard: FC<MatchCardProps> = ({ item }) => {
                 <span>{bet?.awayScore ?? "-"}</span>
               </div>
 
-              {isKnockout && bet?.predictedAdvancingTeamId && (
+              {isKnockout && isFirstLeg && bet?.predictedAdvancingTeamId && (
                 <span className="text-xs text-amber-400 font-medium mt-1.5 flex items-center gap-1 text-center">
                   To advance:{" "}
                   <span className="text-gray-200 font-semibold">
@@ -177,7 +177,7 @@ export const MatchCard: FC<MatchCardProps> = ({ item }) => {
                 />
               </div>
 
-              {isKnockout && item.homeTeam && item.awayTeam && (
+              {isKnockout && isFirstLeg && item.homeTeam && item.awayTeam && (
                 <div className="mt-4 flex flex-col items-center gap-1.5 w-full">
                   <span className="text-[0.675rem] uppercase tracking-wider text-text-muted font-semibold">
                     Who qualifies?
@@ -185,18 +185,19 @@ export const MatchCard: FC<MatchCardProps> = ({ item }) => {
                   <Tabs
                     value={advancingTeamId}
                     onValueChange={setAdvancingTeamId}
-                    className="w-full md:w-auto"
+                    className="w-full"
+                    orientation="vertical"
                   >
-                    <TabsList className="bg-[#161b22] border !border-brand-border flex flex-wrap h-auto p-1 w-full gap-x-1">
+                    <TabsList className="bg-[#161b22] border !border-brand-border flex flex-wrap h-auto p-1 w-full gap-x-1 mx-1">
                       <TabsTrigger
                         value={item.homeTeam?.id}
-                        className="w-full data-active:bg-emerald-600 data-active:text-white text-gray-400 uppercase text-xs px-3 py-1.5"
+                        className="w-full data-active:bg-emerald-900 data-active:text-white text-gray-400 uppercase text-xs px-3 py-1.5 !justify-center"
                       >
                         {item.homeTeam.name}
                       </TabsTrigger>
                       <TabsTrigger
                         value={item.awayTeam?.id}
-                        className="w-full data-active:bg-emerald-600 data-active:text-white text-gray-400 uppercase text-xs px-3 py-1.5"
+                        className="w-full data-active:bg-emerald-900 data-active:text-white text-gray-400 uppercase text-xs px-3 py-1.5 !justify-center"
                       >
                         {item.awayTeam.name}
                       </TabsTrigger>
@@ -239,9 +240,10 @@ export const MatchCard: FC<MatchCardProps> = ({ item }) => {
                   : "bg-red-500/10 text-red-400 border-red-500/30",
               )}
             >
-              {totalPoints === 0
-                ? "0 points earned"
-                : `+${totalPoints} points earned`}
+              <span>
+                +${totalPoints} points earned{" "}
+                {bet?.advancingPointsEarned && <span>1 advancing point</span>}
+              </span>
             </div>
           ) : (
             <div className="px-4 py-2 rounded-md text-xs sm:text-sm font-semibold text-center bg-gray-800/40 text-gray-500 border border-brand-border/40">
@@ -256,7 +258,7 @@ export const MatchCard: FC<MatchCardProps> = ({ item }) => {
               !awayScore ||
               isStarted ||
               isPending ||
-              !!(isKnockout && !advancingTeamId)
+              !!(isKnockout && isFirstLeg && !advancingTeamId)
             }
             className="w-full"
             onClick={() =>

@@ -7,6 +7,7 @@ interface Prediction {
   logo?: string;
   name: string;
   pointsEarned: number | null;
+  pointsWorth: number | null;
 }
 
 interface BonusPredictionsProps {
@@ -37,7 +38,7 @@ export function BonusPredictions({ predictions }: BonusPredictionsProps) {
       value: predictions?.champion?.id,
       logo: predictions?.champion?.logo,
       points: predictions?.champion?.pointsEarned,
-      pointsWorth: 15,
+      pointsWorth: predictions?.champion?.pointsWorth,
     },
     {
       type: BonusPredictionType.RUNNER_UP,
@@ -45,7 +46,7 @@ export function BonusPredictions({ predictions }: BonusPredictionsProps) {
       value: predictions?.runnerUp?.id,
       logo: predictions?.runnerUp?.logo,
       points: predictions?.runnerUp?.pointsEarned,
-      pointsWorth: 10,
+      pointsWorth: predictions?.runnerUp?.pointsWorth,
     },
     {
       type: BonusPredictionType.TOP_SCORER,
@@ -53,12 +54,12 @@ export function BonusPredictions({ predictions }: BonusPredictionsProps) {
       value: predictions?.topScorer?.id,
       logo: predictions?.topScorer?.logo,
       points: predictions?.topScorer?.pointsEarned,
-      pointsWorth: 10,
+      pointsWorth: predictions?.topScorer?.pointsWorth,
     },
   ];
 
   return (
-    <div className="flex flex-col gap-y-6 p-6 bg-brand-container rounded-md border border-brand-border text-white w-full">
+    <div className="flex flex-col gap-y-4 p-4 md:p-6 bg-brand-container rounded-md border border-brand-border text-white w-full">
       <div className="flex pb-3 border-b border-brand-border/50">
         <h2 className="text-lg font-bold tracking-wide">
           Your Bonus Predictions
@@ -71,8 +72,8 @@ export function BonusPredictions({ predictions }: BonusPredictionsProps) {
 
           const hasPredicted = pred.title !== undefined;
           const isPending = hasPredicted && pred.points === null;
-          const isCorrect = hasPredicted && pred.points && pred.points > 0;
-          const isIncorrect = hasPredicted && pred.points && pred.points === 0;
+          const isCorrect = hasPredicted && !!pred.points && pred.points > 0;
+          const isIncorrect = hasPredicted && pred.points === 0;
 
           return (
             <div
@@ -86,9 +87,11 @@ export function BonusPredictions({ predictions }: BonusPredictionsProps) {
                     {BONUS_PREDICTION_LABELS[pred.type]}
                   </span>
                 </div>
-                <span className="text-xs text-gray-400 font-medium">
-                  worth {pred.pointsWorth} pts
-                </span>
+                {pred.pointsWorth ? (
+                  <span className="text-xs text-gray-400 font-medium">
+                    worth {pred.pointsWorth} pts
+                  </span>
+                ) : null}
               </div>
 
               <div className="flex items-end justify-between mt-2">
@@ -117,21 +120,21 @@ export function BonusPredictions({ predictions }: BonusPredictionsProps) {
                   </span>
                 </div>
                 <div className="text-xs font-medium tracking-wide pb-0.5">
-                  {isPending && (
+                  {isPending ? (
                     <span className="text-gray-400 bg-brand-border-muted/20 px-2 py-1 rounded text-xs border border-brand-border/60">
                       Pending
                     </span>
-                  )}
-                  {isCorrect && (
+                  ) : null}
+                  {isCorrect ? (
                     <span className="bg-emerald-500/20 text-emerald-400 px-2 py-1 rounded text-xs border border-emerald-500/60">
-                      +{12} pts
+                      +{pred.points} pts
                     </span>
-                  )}
-                  {isIncorrect && (
+                  ) : null}
+                  {isIncorrect ? (
                     <span className="bg-red-500/20 text-red-400 px-2 py-1 rounded text-xs border border-red-500/60">
                       0 pts
                     </span>
-                  )}
+                  ) : null}
                 </div>
               </div>
             </div>

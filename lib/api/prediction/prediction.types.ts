@@ -17,6 +17,7 @@ export type GetPredictionsResponse = {
     stats: Statistic;
     bets: Array<Bet>;
     bonusPrediction: {
+      totalBonusPoints: number | null;
       champion: {
         id: number;
         logo: string;

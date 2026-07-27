@@ -17,7 +17,7 @@ export function UserStatsCards({ statistic }: UserStatsProps) {
     },
     {
       title: "Bonus Points",
-      value: 0,
+      value: statistic?.bonusPoints,
       icon: Award,
       iconColor: "text-purple-500",
     },

@@ -42,3 +42,21 @@ export const useGetAllTournaments = (
     queryFn: tournamentApi.getAll,
     ...queryParams,
   });
+
+export const useSyncTeams = () =>
+  useMutation({
+    mutationKey: ["sync-teams"],
+    mutationFn: tournamentApi.syncTeams,
+  });
+
+export const useSyncMatches = () =>
+  useMutation({
+    mutationKey: ["sync-matches"],
+    mutationFn: tournamentApi.syncMatches,
+  });
+
+export const useFinalizeTournament = () =>
+  useMutation({
+    mutationKey: ["finalize-tournament"],
+    mutationFn: tournamentApi.finalizeTournament,
+  });

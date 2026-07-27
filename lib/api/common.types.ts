@@ -30,7 +30,7 @@ export type Bet = {
   homeScore: number | null;
   pointsEarned: number;
   advancingPointsEarned?: number;
-  predictedAdvancingTeamId?: string | null;
+  predictedAdvancingTeamId?: number | null;
   matchId: string;
   userId: string;
   createdAt: string;
@@ -81,4 +81,5 @@ export type Statistic = {
   totalPoints: number;
   totalPredictions: number;
   userId: string;
+  bonusPoints: number | null;
 };

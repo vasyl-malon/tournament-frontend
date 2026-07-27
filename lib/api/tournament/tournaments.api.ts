@@ -7,6 +7,8 @@ import {
   GetParticipantsOverviewResponse,
   InviteUserParams,
   InviteUserResponse,
+  SyncTournamentParams,
+  FinalizeTournamentParams,
 } from "./tournaments.types";
 
 export const tournamentApi = {
@@ -44,6 +46,24 @@ export const tournamentApi = {
   }: GetParticipantsOverviewParams) => {
     const res = await api.get<GetParticipantsOverviewResponse>(
       `/tournaments/${tournamentId}/participants-overview`,
+    );
+    return res.data;
+  },
+
+  syncTeams: async ({ tournamentId }: SyncTournamentParams) => {
+    const res = await api.post(`/tournaments/${tournamentId}/teams/sync`);
+    return res.data;
+  },
+
+  syncMatches: async ({ tournamentId }: SyncTournamentParams) => {
+    const res = await api.post(`/tournaments/${tournamentId}/matches/sync`);
+    return res.data;
+  },
+
+  finalizeTournament: async (params: FinalizeTournamentParams) => {
+    const res = await api.post(
+      `/tournaments/${params.tournamentId}/finalize`,
+      params,
     );
     return res.data;
   },

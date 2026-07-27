@@ -13,6 +13,9 @@ import {
   useGetMyTournaments,
   useInviteUser,
   useGetAllTournaments,
+  useFinalizeTournament,
+  useSyncTeams,
+  useSyncMatches,
 } from "./tournament/tournaments.queries";
 import { useGetActiveUsers } from "./user/user.queries";
 
@@ -32,4 +35,7 @@ export {
   useInviteUser,
   useGetParticipantsOverview,
   useGetAllTournaments,
+  useSyncTeams,
+  useSyncMatches,
+  useFinalizeTournament,
 };

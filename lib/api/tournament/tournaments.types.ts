@@ -50,3 +50,14 @@ export type GetParticipantsOverviewResponse = {
     }>;
   };
 };
+
+export type SyncTournamentParams = {
+  tournamentId: string;
+};
+
+export type FinalizeTournamentParams = {
+  tournamentId: string;
+  championTeamId: number;
+  runnerUpTeamId: number;
+  topScorerId: number;
+};

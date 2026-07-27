@@ -29,7 +29,7 @@ export const predictionApi = {
   },
 
   addBonusPrediction: async (params: AddBonusPredictionParams) => {
-    const res = await api.post<object>(`/matches/bonus`, params);
+    const res = await api.post<object>('/predictions/bonus', params);
     return res.data;
   },
 };

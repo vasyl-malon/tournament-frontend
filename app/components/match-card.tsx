@@ -50,6 +50,8 @@ export const MatchCard: FC<MatchCardProps> = ({ item }) => {
   const totalPoints =
     (bet?.pointsEarned || 0) + (bet?.advancingPointsEarned || 0);
 
+  console.log(bet);
+
   const handleScoreChange = (val: string, type: "home" | "away") => {
     const cleanVal = val.replace(/\D/g, "").slice(0, 2);
     const newHome = type === "home" ? cleanVal : homeScore;
@@ -241,8 +243,12 @@ export const MatchCard: FC<MatchCardProps> = ({ item }) => {
               )}
             >
               <span>
-                +${totalPoints} points earned{" "}
-                {bet?.advancingPointsEarned && <span>1 advancing point</span>}
+                +{totalPoints} points earned{" "}
+                {!!bet?.advancingPointsEarned && (
+                  <span className="text-emerald-400/90 text-xs font-normal">
+                    (incl. +{bet.advancingPointsEarned} for qualifying)
+                  </span>
+                )}
               </span>
             </div>
           ) : (

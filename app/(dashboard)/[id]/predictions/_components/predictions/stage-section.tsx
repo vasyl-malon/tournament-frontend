@@ -12,7 +12,10 @@ interface StageSectionProps {
 export const StageSection: FC<StageSectionProps> = ({ stage, matchdays }) => {
   const stageTotalPoints = Object.values(matchdays)
     .flat()
-    .reduce((sum, b) => sum + (b.pointsEarned || 0), 0);
+    .reduce(
+      (sum, b) => sum + (b.pointsEarned + (b.advancingPointsEarned ?? 0)),
+      0,
+    );
 
   return (
     <div className="flex flex-col gap-y-6 p-4 md:p-6 bg-brand-container rounded-md border border-brand-border shadow-sm">

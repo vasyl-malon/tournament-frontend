@@ -14,7 +14,7 @@ export const MatchdaySection: FC<MatchdaySectionProps> = ({
   bets,
 }) => {
   const matchdayPoints = bets.reduce(
-    (sum, b) => sum + (b.pointsEarned || 0),
+    (sum, b) => sum + (b.pointsEarned + (b.advancingPointsEarned ?? 0)),
     0,
   );
 

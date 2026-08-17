@@ -11,14 +11,23 @@ interface BetCardProps {
 export const BetCard: FC<BetCardProps> = ({ bet }) => {
   const isFinished = bet.match.status === MatchStatus.FINISHED;
   const isPending = !isFinished;
-  const points = bet.pointsEarned ?? 0;
 
-  const isExact = isFinished && points === 3;
-  const isDiff = isFinished && points === 2;
-  const isOutcome = isFinished && points === 1;
-  const isLoss = isFinished && points === 0;
+  const scorePoints = bet.pointsEarned ?? 0;
+  const isSecondLeg = bet.match.matchday === 2;
 
-  console.log(points);
+  const advancingPoints = isSecondLeg ? (bet.advancingPointsEarned ?? 0) : 0;
+  const totalPoints = scorePoints + advancingPoints;
+
+  const isExact = isFinished && scorePoints === 3;
+  const isDiff = isFinished && scorePoints === 2;
+  const isOutcome = isFinished && scorePoints === 1;
+  const isScoreLoss = isFinished && scorePoints === 0;
+
+  const hasAdvancingPrediction =
+    bet.advancingPointsEarned !== undefined &&
+    bet.advancingPointsEarned !== null;
+  const isAdvancingCorrect =
+    isSecondLeg && hasAdvancingPrediction && advancingPoints > 0;
 
   return (
     <div
@@ -26,11 +35,14 @@ export const BetCard: FC<BetCardProps> = ({ bet }) => {
         "flex flex-col md:flex-row items-stretch md:items-center justify-between p-4 md:py-3.5 rounded-md border gap-4",
         isPending &&
           "bg-brand-container/80 border-brand-border/80 border-s-4 border-s-gray-500",
-        isExact &&
-          "bg-emerald-500/10 border-emerald-500/30 border-s-4 border-s-emerald-500",
-        (isDiff || isOutcome) &&
-          "bg-amber-500/10 border-amber-500/30 border-s-4 border-s-amber-500",
-        isLoss && "bg-red-500/10 border-red-500/30 border-s-4 border-s-red-500",
+        isFinished &&
+          totalPoints > 0 &&
+          (isExact
+            ? "bg-emerald-500/10 border-emerald-500/30 border-s-4 border-s-emerald-500"
+            : "bg-amber-500/10 border-amber-500/30 border-s-4 border-s-amber-500"),
+        isFinished &&
+          totalPoints === 0 &&
+          "bg-red-500/10 border-red-500/30 border-s-4 border-s-red-500",
       )}
     >
       <div className="flex flex-col justify-center gap-2.5 flex-1 min-w-0">
@@ -74,7 +86,7 @@ export const BetCard: FC<BetCardProps> = ({ bet }) => {
           </div>
         </div>
         {isFinished && (
-          <div className="flex items-center gap-1.5 text-xs">
+          <div className="flex flex-col gap-1.5 text-xs">
             {isExact && (
               <span className="text-emerald-400 font-semibold flex items-center gap-1.5">
                 <span className="size-1.5 rounded-full bg-emerald-400" />
@@ -93,12 +105,25 @@ export const BetCard: FC<BetCardProps> = ({ bet }) => {
                 winner (+1)
               </span>
             )}
-            {isLoss && (
+            {isScoreLoss && (
               <span className="text-red-400 font-medium flex items-center gap-1.5">
                 <span className="size-1.5 rounded-full bg-red-400" />
                 Wrong outcome (0)
               </span>
             )}
+            {isSecondLeg &&
+              hasAdvancingPrediction &&
+              (isAdvancingCorrect ? (
+                <span className="text-sky-400 font-semibold flex items-center gap-1.5">
+                  <span className="size-1.5 rounded-full bg-sky-400" />
+                  Correct advancing team (+{advancingPoints})
+                </span>
+              ) : (
+                <span className="text-red-400 font-medium flex items-center gap-1.5">
+                  <span className="size-1.5 rounded-full bg-red-400" />
+                  Wrong advancing team (0)
+                </span>
+              ))}
           </div>
         )}
       </div>
@@ -132,15 +157,17 @@ export const BetCard: FC<BetCardProps> = ({ bet }) => {
             <div className="flex items-center justify-center w-full py-1.5 rounded-sm bg-brand-page border border-brand-border/60 text-gray-500 shadow-sm">
               <Clock className="size-4" />
             </div>
-          ) : isExact ? (
-            <div className="flex items-center justify-center gap-1 w-full py-1.5 rounded-sm bg-emerald-500/20 text-emerald-400 border border-emerald-500/60 shadow-sm">
+          ) : totalPoints > 0 ? (
+            <div
+              className={cn(
+                "flex items-center justify-center gap-1 w-full py-1.5 rounded-sm border shadow-sm",
+                isExact
+                  ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/60"
+                  : "bg-amber-500/20 text-amber-400 border-amber-500/60",
+              )}
+            >
               <CheckCircle2 className="size-4" />
-              <span>+3</span>
-            </div>
-          ) : isDiff || isOutcome ? (
-            <div className="flex items-center justify-center gap-1 w-full py-1.5 rounded-sm bg-amber-500/20 text-amber-400 border border-amber-500/60 shadow-sm">
-              <CheckCircle2 className="size-4" />
-              <span>+{points}</span>
+              <span>+{totalPoints}</span>
             </div>
           ) : (
             <div className="flex items-center justify-center gap-1 w-full py-1.5 rounded-sm bg-red-500/20 text-red-400 border border-red-500/60 shadow-sm">

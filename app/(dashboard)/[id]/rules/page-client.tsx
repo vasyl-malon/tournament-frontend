@@ -101,15 +101,15 @@ export const RulesPage: FC = () => {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold uppercase tracking-wider text-amber-400">
-                  Correct Winner / Draw
+                  Correct Winner
                 </span>
                 <span className="px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-400 font-black text-sm border border-amber-500/30">
                   +1 pt
                 </span>
               </div>
               <p className="text-xs text-gray-300">
-                Guessed the overall outcome (Home win, Away win, or Draw), but
-                not goal difference.
+                Guessed the overall outcome (Home or Away win), but not goal
+                difference.
               </p>
             </div>
             <div className="bg-brand-page p-2.5 rounded-lg border border-brand-border/40 text-xs font-mono space-y-1">

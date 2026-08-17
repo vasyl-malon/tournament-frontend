@@ -22,7 +22,7 @@ export function HomePage() {
     : "/dashboard";
 
   return (
-    <div className="flex flex-col gap-y-12 md:gap-y-20 overflow-hidden">
+    <div className="flex flex-col gap-y-12 md:gap-y-20">
       <section className="relative flex flex-col items-center text-center max-w-5xl mx-auto w-full">
         <div className="absolute -top-20 left-1/2 -translate-x-1/2 size-96 bg-emerald-500/15 rounded-full blur-[120px] pointer-events-none" />
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold mb-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
